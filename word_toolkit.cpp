@@ -9,7 +9,7 @@ bool es_canonic(const string& s) throw(){
     if (s.size()!=0){
         int i=0;
         while (i<s.size()-1 and canonic){
-            if (s.[i]>s.[i+1]) canonic=false;
+            if (s[i]>s[i+1]) canonic=false;
             else i++;
         }
     }
@@ -32,7 +32,7 @@ string anagrama_canonic(const string& s) throw(){
 		    cont=0;                     //guarda posicio per borrar lletra del string
 		    aux=aux_string[0];
 		    while (i<aux_string.size()){
-			    if (x[i]<aux){
+			    if (aux_string[i]<aux){
 				    aux=aux_string[i];
 				    cont=i;
 			    }
