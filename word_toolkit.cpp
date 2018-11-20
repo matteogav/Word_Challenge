@@ -21,11 +21,27 @@ bool es_canonic(const string& s) throw(){
 string anagrama_canonic(const string& s) throw(){
     //Pre: true
     //Post: retorna l'string ordenda canonicament
-    string res=s[0];
+    string res;
+    string aux_string=s;                //copia de s que anem redueint
     if (s.es_canonic()) res=s;
     else  {
-    }
-
+	    char aux;
+	    int i,cont;
+	    while(!aux_string.empty()){	
+		    i=0;                        //recorre l'string
+		    cont=0;                     //guarda posicio per borrar lletra del string
+		    aux=aux_string[0];
+		    while (i<aux_string.size()){
+			    if (x[i]<aux){
+				    aux=aux_string[i];
+				    cont=i;
+			    }
+			    i++;
+		    }	
+		    aux_string.erase(aux_string.begin()+cont);
+		    res.push_back(aux);
+		}
+	}
     return res;
 }
 
