@@ -1,4 +1,5 @@
 #include "word_toolkit.hpp"
+#include <algorithm>
 
 /* Retorna cert si i només si les lletres de l'string s estan en
     ordre lexicogràfic ascendent. */
@@ -21,26 +22,9 @@ bool es_canonic(const string& s) throw(){
 string anagrama_canonic(const string& s) throw(){
     //Pre: true
     //Post: retorna l'string ordenda canonicament
-    string res;
-    string aux_string=s;                //copia de s que anem reduint
-    if (s.es_canonic()) res=s;
-    else  {
-	    char aux;
-	    int i,cont;
-	    while(!aux_string.empty()){	
-		    i=0;                        //recorre l'string
-		    cont=0;                     //guarda posicio per borrar lletra del string
-		    aux=aux_string[0];
-		    while (i<aux_string.size()){
-			    if (aux_string[i]<aux){
-				    aux=aux_string[i];
-				    cont=i;
-			    }
-			    i++;
-		    }	
-		    aux_string.erase(aux_string.begin()+cont);
-		    res.push_back(aux);
-		}
+    string res=s;
+    if (!es_canonic(s)) {
+	    sort(res.begin(),res.end());
 	}
     return res;
 }
