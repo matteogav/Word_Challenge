@@ -37,44 +37,95 @@ string anagrama_canonic(const string& s) throw(){
     Si l'string excl inclou totes les lletres de la 'A' a la 'Z' es
     retorna el caràcter '\0', és a dir, el caràcter de codi ASCII 0. */
 char mes_frequent(const string& excl, const list<string>& L) throw(){
+    //si excl es tot l'abacedari res='\0'
     string abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     char res;
+    list<string> aux_L=L;                   //copia manajable de L
     if (abc==excl) res='\0';
+    //sino
     else {
-        string aux_string;
-        list<pair<char,int> > aux_pair;
-        int i=0;                    //i contador llista
-        while (i<L.size()){
-            aux_string=L[i];
-            char aux_char;
-            while (!aux_string.empty()){
-                aux_char=aux_string[0];                     //mirar sempre el primer char
-                bool trobat=false;
-                int j=0;
-                while(j<aux_pair.size() and !trobat){
-                    if (aux_char==aux_pair[j].first()) trobat=true;
-                    else j++;
-                }                
-                if (!trobat) pair<char,int> nou_pair=(aux_char,1);
-                else aux_pair[j].second+=1;
-                aux_string.erase(aux_string.begin()+0);     //borrar primer char de l'string
+        list<pair<char,int> > list_pair;                //llista de pairs
+        list<string>::iterator it_L=aux_L.begin();      //iterador que apunta a la primera paraula
+        //bucle de cada paraula
+        while (it_L!=aux_L.end()){
+            string paraula=*it_L;
+            //bucle de treure lletres que estiguin a excl
+            for (unsigned j=0;j<excl.size();j++){
+                int k=0;
+                while (k<paraula.size()){
+                    if (paraula[k]==excl[j]) paraula.erase(paraula.begin()+k);
+                    else k++;
+                }
             }
-            i++;
+            //si paraula no es buida
+            if (!paraula.empty()){
+                //ordena canonicament
+                paraula=anagrama_canonic(paraula);
+                //Si list_pair esta buida
+                if (!list_pair.empty()){
+                    //crear pair
+                    pair<char,int> nou_pair(paraula[0],0);
+                    list_pair.push_back(nou_pair);
+                }
+                char lletra;
+                int cont;
+                //bucle de cada lletra de la paraula
+                for (unsigned j=0;j<paraula.size();j++){
+                    if (j==0){
+                        lletra=paraula[j];
+                        cont=1;
+                    }
+                    else{
+                        if (lletra==paraula[j]){
+                            cont++;
+                        }
+                        else{
+                            bool trobat=false;
+                            list<pair<char,int> >::iterator it_pair=list_pair.begin();
+                            while (it_pair!=list_pair.end() and !trobat){
+                                if (lletra==(*it_pair).first){
+                                    (*it_pair).second++;
+                                    trobat=true;
+                                }
+                            }
+                            if (!trobat){
+                                pair<char,int> nou_pair(lletra,cont);
+                                list_pair.push_back(nou_pair);
+                                lletra=paraula[j];
+                                cont=1;
+                            }
+                        }
+                    }
+                }
+            }
+            //avançar lletra
+            it_L++;
         }
+        //buscar pair mes gran
+        list<pair<char,int> >::iterator it=list_pair.begin();
+        int max=0;
+        char lletra_max;
+        bool empat=false;
+        while (it!=list_pair.end()){
+            if ((*it).second>max){
+                max=(*it).second;
+                lletra_max=(*it).first;
+                empat=false;
+            }
+            else if ((*it).second=max) empat=true;
+            it++;
+        }
+        pair<char,int> aux=*it;
+        if (list_pair.size()>2){
+            it++;
+            pair<char,int> aux2=*it;
+            //si pair[0].second == pair[1].second res='<';
+            if(aux.second == aux2.second) res='<';
+            //sino res=pair[0].first;
+            else res=aux.first;
+        }
+        else res=aux.first;
     }
-
+    //return res
+    return res;
 }
-
-/*
-si excl es igual a [A..Z] res='\0';
-sino
-    bucle agafant una paraula de la llista
-        bucle mirant totes les lletres de la paraula agafada
-            si pertany a la llista pair<char,int> (.fisrt) sumar-li 1 a (.second)
-            sino afegir a la llista pair<char,int>
-            seguent lletra
-        seguent paraula
-    mirar qui te el numero mes gran amb xivato bool si hi ha algu igual
-    si bool = true res='>';
-    sino res=pair.first;
-*/
