@@ -39,13 +39,14 @@ string anagrama_canonic(const string& s) throw(){
 char mes_frequent(const string& excl, const list<string>& L) throw(){
     //si excl es tot l'abacedari res='\0'
     string abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    char res;
+    char res='\0';
     list<string> aux_L=L;                   //copia manajable de L
     if (abc==excl) res='\0';
     //sino
     else {
         list<pair<char,int> > list_pair;                //llista de pairs
         list<string>::iterator it_L=aux_L.begin();      //iterador que apunta a la primera paraula
+        int cont=1;
         //bucle de cada paraula
         while (it_L!=aux_L.end()){
             string paraula=*it_L;
@@ -61,40 +62,29 @@ char mes_frequent(const string& excl, const list<string>& L) throw(){
             if (!paraula.empty()){
                 //ordena canonicament
                 paraula=anagrama_canonic(paraula);
-                //Si list_pair esta buida
-                if (!list_pair.empty()){
-                    //crear pair
-                    pair<char,int> nou_pair(paraula[0],0);
-                    list_pair.push_back(nou_pair);
-                }
-                char lletra;
-                int cont;
+                char lletra=paraula[0];
+		        char lletra_ant=paraula[0];
                 //bucle de cada lletra de la paraula
                 for (unsigned j=0;j<paraula.size();j++){
-                    if (j==0){
-                        lletra=paraula[j];
-                        cont=1;
+		            lletra=paraula[j];
+                    if (lletra!=lletra_ant){
+                        lletra_ant=lletra;
                     }
-                    else{
-                        if (lletra==paraula[j]){
-                            cont++;
+		            bool trobat=false;
+                    list<pair<char,int> >::iterator it_pair=list_pair.begin();
+		            //buscar si existeix pair de la lletra si es aixi actualitzem el second amb el numero vegades
+		            while (it_pair!=list_pair.end() and !trobat){
+                        if (lletra==(*it_pair).first){
+                            (*it_pair).second++;
+                            trobat=true;
                         }
-                        else{
-                            bool trobat=false;
-                            list<pair<char,int> >::iterator it_pair=list_pair.begin();
-                            while (it_pair!=list_pair.end() and !trobat){
-                                if (lletra==(*it_pair).first){
-                                    (*it_pair).second++;
-                                    trobat=true;
-                                }
-                            }
-                            if (!trobat){
-                                pair<char,int> nou_pair(lletra,cont);
-                                list_pair.push_back(nou_pair);
-                                lletra=paraula[j];
-                                cont=1;
-                            }
-                        }
+			            else it_pair++;
+                    }
+		            //sino es trobat crear nou pair amb el cont que ha surtit i canviar de paraula i sumar 1 al cont
+                    if (!trobat){
+                        pair<char,int> nou_pair(lletra,cont);
+                        list_pair.push_back(nou_pair);
+                        lletra_ant=lletra;
                     }
                 }
             }
@@ -104,27 +94,25 @@ char mes_frequent(const string& excl, const list<string>& L) throw(){
         //buscar pair mes gran
         list<pair<char,int> >::iterator it=list_pair.begin();
         int max=0;
-        char lletra_max;
-        bool empat=false;
-        while (it!=list_pair.end()){
+	    list<char> list_aux;
+        //Bucle si es mes gran que max borrar llista i posar nou pair si es igual afegir element
+	    while (it!=list_pair.end()){
             if ((*it).second>max){
                 max=(*it).second;
-                lletra_max=(*it).first;
-                empat=false;
+	    	    char nou_char=(*it).first;
+	    	    list_aux.erase(list_aux.begin(),list_aux.end());
+	    	    list_aux.push_back(nou_char);
             }
-            else if ((*it).second=max) empat=true;
+            else if ((*it).second==max) {
+		        char nou_char=(*it).first;
+		        list_aux.push_back(nou_char);
+	        }
             it++;
         }
-        pair<char,int> aux=*it;
-        if (list_pair.size()>2){
-            it++;
-            pair<char,int> aux2=*it;
-            //si pair[0].second == pair[1].second res='<';
-            if(aux.second == aux2.second) res='<';
-            //sino res=pair[0].first;
-            else res=aux.first;
-        }
-        else res=aux.first;
+        //si llista es mes gran que 1 empat, sino treure primer element de la llista
+	    list<char>::iterator it_char_aux=list_aux.begin();
+	    if (list_aux.size()>1) res='<';
+	    else res=*it_char_aux;
     }
     //return res
     return res;
