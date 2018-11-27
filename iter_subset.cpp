@@ -20,7 +20,7 @@ iter_subset::~iter_subset() throw(){
      de k elements presos d'entre n; o dit d'una altra forma, retorna
      cert quan l'iterador apunta a un subconjunt sentinella fictici
      que queda a continuació de l'últim subconjunt vàlid. */
-bool iter_subset::end() throw(){
+bool iter_subset::end() const throw(){
 }
 
 /* Operador de desreferència. Retorna el subconjunt apuntat per
