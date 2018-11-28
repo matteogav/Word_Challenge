@@ -1,1 +1,2 @@
-subset info;
+subset _info;
+bool _final;
