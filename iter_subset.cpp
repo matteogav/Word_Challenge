@@ -3,6 +3,7 @@
 /* Construeix un iterador sobre els subconjunts de k elements
      de {1, ..., n}; si k > n no hi ha res a recórrer. */
 iter_subset::iter_subset(nat n, nat k) throw(error){
+  _av_cent = (n-k+1);
   for(int i=0; i<k; ++i){
     if(i+1<n) _info[i]=i+1;
   }
@@ -16,6 +17,7 @@ iter_subset& iter_subset::operator=(const iter_subset& its) throw(error){
 
 }
 iter_subset::~iter_subset() throw(){
+
 }
 
 /* Retorna cert si l'iterador ja ha visitat tots els subconjunts
@@ -23,6 +25,7 @@ iter_subset::~iter_subset() throw(){
      cert quan l'iterador apunta a un subconjunt sentinella fictici
      que queda a continuació de l'últim subconjunt vàlid. */
 bool iter_subset::end() const throw(){
+  return _final;
 }
 
 /* Operador de desreferència. Retorna el subconjunt apuntat per
@@ -38,6 +41,7 @@ subset iter_subset::operator*() const throw(error){
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset::iter_subset& iter_subset::operator++() throw(){
+
 }
 
 /* Operador de postincrement.
@@ -51,6 +55,12 @@ iter_subset::iter_subset iter_subset::operator++(int) throw(){
 
 /* Operadors relacionals. */
 bool iter_subset::operator==(const iter_subset& c) const throw(){
+  bool b = true; int i=0;
+  while(not c._final){
+    if(c._info[i]!=_info[i]) b = false;
+    else ++i;
+  }
+  return b;
 }
 bool iter_subset::operator!=(const iter_subset& c) const throw(){
   return not (*this == c)
