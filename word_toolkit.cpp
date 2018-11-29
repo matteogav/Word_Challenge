@@ -61,8 +61,13 @@ char mes_frequent(const string& excl, const list<string>& L) throw(){
         }
         //bucle de treure (posar a 0) lletres que estiguin a excl
         for (unsigned j=0;j<excl.size();j++){
-	        int aux=excl[j]-65;
-            vect[aux]=0;
+	        char aux=excl[j];
+	        int x=aux-65;
+	        if (0 >= x or x < 26){
+		        cout<<"entra if"<<endl;
+		        int aux_int=aux-65;
+	            vect[aux_int]=0;
+	        }
         }
         int max=0,xivato=0;
         char lletra_max;
