@@ -44,75 +44,44 @@ char mes_frequent(const string& excl, const list<string>& L) throw(){
     if (abc==excl) res='\0';
     //sino
     else {
-        list<pair<char,int> > list_pair;                //llista de pairs
+        int vect[26] = {0};
         list<string>::iterator it_L=aux_L.begin();      //iterador que apunta a la primera paraula
-        int cont=1;
         //bucle de cada paraula
         while (it_L!=aux_L.end()){
             string paraula=*it_L;
-            //bucle de treure lletres que estiguin a excl
-            for (unsigned j=0;j<excl.size();j++){
-                int k=0;
-                while (k<paraula.size()){
-                    if (paraula[k]==excl[j]) paraula.erase(paraula.begin()+k);
-                    else k++;
-                }
+            char lletra;
+            //bucle de cada lletra de la paraula
+            for (unsigned j=0;j<paraula.size();j++){
+		        lletra=paraula[j];
+                int aux=lletra-65;
+                vect[aux]++;
             }
-            //si paraula no es buida
-            if (!paraula.empty()){
-                //ordena canonicament
-                paraula=anagrama_canonic(paraula);
-                char lletra=paraula[0];
-		        char lletra_ant=paraula[0];
-                //bucle de cada lletra de la paraula
-                for (unsigned j=0;j<paraula.size();j++){
-		            lletra=paraula[j];
-                    if (lletra!=lletra_ant){
-                        lletra_ant=lletra;
-                    }
-		            bool trobat=false;
-                    list<pair<char,int> >::iterator it_pair=list_pair.begin();
-		            //buscar si existeix pair de la lletra si es aixi actualitzem el second amb el numero vegades
-		            while (it_pair!=list_pair.end() and !trobat){
-                        if (lletra==(*it_pair).first){
-                            (*it_pair).second++;
-                            trobat=true;
-                        }
-			            else it_pair++;
-                    }
-		            //sino es trobat crear nou pair amb el cont que ha surtit i canviar de paraula i sumar 1 al cont
-                    if (!trobat){
-                        pair<char,int> nou_pair(lletra,cont);
-                        list_pair.push_back(nou_pair);
-                        lletra_ant=lletra;
-                    }
-                }
-            }
-            //avançar lletra
-            it_L++;
+	        //seguent paraula
+	        it_L++;
         }
-        //buscar pair mes gran
-        list<pair<char,int> >::iterator it=list_pair.begin();
-        int max=0;
-	    list<char> list_aux;
-        //Bucle si es mes gran que max borrar llista i posar nou pair si es igual afegir element
-	    while (it!=list_pair.end()){
-            if ((*it).second>max){
-                max=(*it).second;
-	    	    char nou_char=(*it).first;
-	    	    list_aux.erase(list_aux.begin(),list_aux.end());
-	    	    list_aux.push_back(nou_char);
-            }
-            else if ((*it).second==max) {
-		        char nou_char=(*it).first;
-		        list_aux.push_back(nou_char);
+        //bucle de treure (posar a 0) lletres que estiguin a excl
+        for (unsigned j=0;j<excl.size();j++){
+	        char aux=excl[j];
+	        int x=aux-65;
+	        if (0 >= x or x < 26){
+		        cout<<"entra if"<<endl;
+		        int aux_int=aux-65;
+	            vect[aux_int]=0;
 	        }
-            it++;
         }
-        //si llista es mes gran que 1 empat, sino treure primer element de la llista
-	    list<char>::iterator it_char_aux=list_aux.begin();
-	    if (list_aux.size()>1) res='<';
-	    else res=*it_char_aux;
+        int max=0,xivato=0;
+        char lletra_max;
+        //bucle buscar lletra mes gran el xivato si troba paraules igual es suma si tobra mes gran es posa a 1
+        for (unsigned i=0;i<26;i++){
+            if (max<vect[i]){
+                max=vect[i];
+                xivato=1;
+                lletra_max=i+65;
+            }
+            else if (max==vect[i]) xivato++;
+        }
+        if (xivato>1) res='<';
+        else res=lletra_max;
     }
     //return res
     return res;
