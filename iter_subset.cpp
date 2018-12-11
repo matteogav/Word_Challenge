@@ -3,6 +3,8 @@
 /* Construeix un iterador sobre els subconjunts de k elements
      de {1, ..., n}; si k > n no hi ha res a recórrer. */
 iter_subset::iter_subset(nat n, nat k) throw(error){
+  _n = n;
+  _k = k;
   _av_cent = (n-k+1);
   for(int i=0; i<k; ++i){
     if(i+1<n) _info[i]=i+1;
