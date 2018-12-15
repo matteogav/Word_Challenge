@@ -1,1 +1,34 @@
 #include "anagrames.hpp"
+
+/* Construeix un anagrama buit. */
+anagrames() throw(error){
+
+}
+
+/* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
+anagrames(const anagrames& A) throw(error){
+
+}
+anagrames& operator=(const anagrames& A) throw(error){
+
+}
+~anagrames() throw(){
+
+}
+
+/* Afegeix la paraula p a l'anagrama; si la paraula p ja formava
+    part de l'anagrama, l'operació no té cap efecte. */
+void insereix(const string& p) throw(error){
+
+}
+
+/* Retorna la llista ordenada de paraules p tals que anagrama_canonic(p)=a.
+    Llança un error si les lletres de a no estan en ordre ascendent. */
+void mateix_anagrama_canonic(const string& a, list<string>& L) const throw(error){
+    if(word_toolkit::es_canonic(a)){
+
+    }
+    else{
+        throw NoEsCanonic;
+    }
+}

@@ -15,12 +15,12 @@ public:
 
   /* Construeix un diccionari que conté únicament una paraula:
      la paraula buida. */
-  diccionari() throw(error);       
+  diccionari() throw(error);
 
   /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
-  diccionari(const diccionari& D) throw(error);        
-  diccionari& operator=(const diccionari& D) throw(error); 
-  ~diccionari() throw();      
+  diccionari(const diccionari& D) throw(error);
+  diccionari& operator=(const diccionari& D) throw(error);
+  ~diccionari() throw();
 
   /* Afegeix la paraula p al diccionari; si la paraula p ja formava
      part del diccionari, l'operació no té cap efecte. */
@@ -34,10 +34,9 @@ public:
   /* Retorna la llista de paraules del diccionari que satisfan el
      patró especificat en el vector d'strings q, en ordre alfabètic
      ascendent. */
-  void satisfan_patro(const vector<string>& q, 
-                      list<string>& L) const throw(error);
+  void satisfan_patro(const vector<string>& q, list<string>& L) const throw(error);
 
-  /* Retorna una llista amb totes les paraules del diccionari 
+  /* Retorna una llista amb totes les paraules del diccionari
      de longitud major o igual a k en ordre alfabètic ascendent. */
   void llista_paraules(nat k, list<string>& L) const throw(error);
 

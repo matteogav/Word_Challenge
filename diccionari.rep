@@ -1,0 +1,8 @@
+struct node{
+    string _paraula;
+    node* next;
+    node* ant;
+};
+
+node* _front;
+nat _sz;
