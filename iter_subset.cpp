@@ -1,5 +1,13 @@
 #include "iter_subset.hpp"
 
+/* Retorna una copia del subset passat per parametre.
+subset iter_subset::iter_copia(const subset& sub) throw(error){
+  subset copia;
+  for(int i=0; i<_n; ++i) copia[i] = _info[i];
+  return copia;
+}
+*/
+
 /* Construeix un iterador sobre els subconjunts de k elements
      de {1, ..., n}; si k > n no hi ha res a recórrer. */
 iter_subset::iter_subset(nat n, nat k) throw(error){
@@ -13,13 +21,19 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
 iter_subset::iter_subset(const iter_subset& its) throw(error){
-
+  //_info = iter_copia(its._info);
+  _info = its._info;
+  _n = its._n;
+  _k = its._k;
+  _final = its._final;
+  _cent = its.cent;
 }
+
 iter_subset& iter_subset::operator=(const iter_subset& its) throw(error){
 
 }
-iter_subset::~iter_subset() throw(){
 
+iter_subset::~iter_subset() throw(){
 }
 
 /* Retorna cert si l'iterador ja ha visitat tots els subconjunts
@@ -64,6 +78,7 @@ bool iter_subset::operator==(const iter_subset& c) const throw(){
   }
   return b;
 }
+
 bool iter_subset::operator!=(const iter_subset& c) const throw(){
   return not (*this == c)
 }

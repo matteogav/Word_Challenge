@@ -1,11 +1,6 @@
 subset _info; //Subconjunt
 nat _n;
 nat _k;
-bool _final;  //True quan s'ha arribat a l'ultim subconjunt, sactiva quan _av_cent
-int _av_cent; //calcula quin es lultim subconjunt
-void destruir_iterador(iter_subset its){
-  int i=0;
-  while(not it._end){
-
-  }
-}
+bool _final;  //True quan s'ha arribat a l'ultim subconjunt, sactiva quan _cent
+int _cent; //calcula quin es lultim subconjunt
+subset iter_copia(const subset& sub) throw(error);
