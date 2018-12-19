@@ -1,8 +1,11 @@
 struct node{
-    string _paraula;
-    node* next;
-    node* ant;
+    char _c;
+    node* _esq;
+    node* _cen;
+    node* _dret;
 };
-
-node* _front;
+node* _arrel;
 nat _sz;
+
+static node* rconsulta (node* n, nat i, const string &k) throw();
+static node* rinsereix (node* n, nat i, const string &k) throw(error);

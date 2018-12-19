@@ -8,7 +8,7 @@ bool es_canonic(const string& s) throw(){
     //Post retorna cert si la paraula és canonica i false si no-
     bool canonic=true;
     if (s.size()!=0){
-        int i=0;
+        unsigned i=0;
         while (i<s.size()-1 and canonic){
             if (s[i]>s[i+1]) canonic=false;
             else i++;

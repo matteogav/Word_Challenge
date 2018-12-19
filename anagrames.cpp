@@ -5,13 +5,13 @@ anagrames::anagrames() throw(error){
 }
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
-anagremes::anagrames(const anagrames& A) throw(error){
-  anagremes anagrama_copia = diccionari(A);
-  return anagrama_copia;
+anagrames::anagrames(const anagrames& A) throw(error){
+ // anagremes anagrama_copia = diccionari(A);
+  //return anagrama_copia;
 }
 anagrames& anagrames::operator=(const anagrames& A) throw(error){
-  anagrames a = diccionari::operator=(A);
-  return a;
+  /*anagrames a = diccionari::operator=(A);
+  return a;*/
 }
 anagrames::~anagrames() throw(){
 }
@@ -25,10 +25,10 @@ void anagrames::insereix(const string& p) throw(error){
 /* Retorna la llista ordenada de paraules p tals que anagrama_canonic(p)=a.
     Llança un error si les lletres de a no estan en ordre ascendent. */
 void anagrames::mateix_anagrama_canonic(const string& a, list<string>& L) const throw(error){
-    if(word_toolkit::es_canonic(a)){
+    /*if(word_toolkit::es_canonic(a)){
 
     }
     else{
         throw NoEsCanonic;
-    }
+    }*/
 }
