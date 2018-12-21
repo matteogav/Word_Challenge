@@ -84,7 +84,7 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
 /* Retorna una llista amb totes les paraules del diccionari
     de longitud major o igual a k en ordre alfabètic ascendent. */
 void diccionari::llista_paraules(nat k, list<string>& L) const throw(error){
-
+    
 }
 
 /* Retorna el nombre de paraules en el diccionari. */
