@@ -3,7 +3,7 @@
 /* si m és NULL, el resultat és NULL; sinó,
    el resultat apunta al primer node d'un arbre ternari
    de nodes que són còpia de l'arbre apuntat per m */
-typename copia_nodes::node* diccionari::copia_nodes(node* m) throw(error){
+typename diccionari::node* diccionari::copia_nodes(node* m) throw(error){
   node* n;
     if (m == NULL) n = NULL;
     else {
@@ -22,11 +22,11 @@ typename copia_nodes::node* diccionari::copia_nodes(node* m) throw(error){
     return n;
 }
 
-typename void esborra_nodes(node* m) throw(){
+void diccionari::esborra_nodes(node* m) throw(){
     if (m != NULL) {
         esborra_nodes(m->_esq);
         esborra_nodes(m->_dret);
-        esborra_nodes(m->_cen)
+        esborra_nodes(m->_cen);
         delete m;
     }
 }
@@ -34,7 +34,9 @@ typename void esborra_nodes(node* m) throw(){
 /* Construeix un diccionari que conté únicament una paraula:
     la paraula buida. */
 diccionari::diccionari() throw(error){
-    _arrel = NULL;
+    _arrel->_c='\0';
+    _arrel->_esq = _arrel->_cen = _arrel->_dret = NULL;
+    _sz=1;
 }
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
@@ -57,16 +59,19 @@ diccionari::~diccionari() throw(){
 /* Afegeix la paraula p al diccionari; si la paraula p ja formava
     part del diccionari, l'operació no té cap efecte. */
 void diccionari::insereix(const string& p) throw(error){
-    string p2 = p /*+ especial<string>()*/;
+    string p2 = p + '#';
     _arrel = rinsereix(_arrel, 0, p2);
+    _sz++;
 }
 
 /* Retorna el prefix més llarg de p que és una paraula que pertany
     al diccionari, o dit d'una forma més precisa, retorna la
     paraula més llarga del diccionari que és prefix de p. */
 string diccionari::prefix(const string& p) const throw(error){
-    string s;
-    return s;
+    string p2 = p;
+    string res = "";
+    rprefix(_arrel,0,p2,res);
+    return res;
 }
 
 /* Retorna la llista de paraules del diccionari que satisfan el
@@ -87,9 +92,15 @@ nat diccionari::num_pal() const throw(){
     return _sz;
 }
 
-typename diccionari::node* diccionari::rconsulta (node* n, nat i, const string &k) throw(){
-    node *ss =new node;
-    return ss;
+void diccionari::rprefix (node* n, nat i, const string &k, string &res) throw(){
+    if (n != NULL and i < k.size()){
+        if (n->_c > k[i]) rprefix(n->_esq, i, k, res);
+        else if (n->_c < k[i]) rprefix(n->_dret, i, k, res);
+        else if (n->_c == k[i]) {
+            res = res + k[i];
+            rprefix(n->_cen, i+1, k, res);
+        }
+    }
 }
 
 typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &k) throw(error){
@@ -98,7 +109,7 @@ typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &
         n->_esq = n->_dret = n->_cen = NULL;
         n->_c = k[i];
         try{
-            if (i < k.size()-1){
+            if (i < k.size()){
                 n->_cen = rinsereix(n->_cen, i+1, k);
             }
         }

@@ -6,12 +6,13 @@ anagrames::anagrames() throw(error){
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
 anagrames::anagrames(const anagrames& A) throw(error){
- // anagremes anagrama_copia = diccionari(A);
+  //anagremes anagrama_copia = diccionari(A);
   //return anagrama_copia;
 }
 anagrames& anagrames::operator=(const anagrames& A) throw(error){
   /*anagrames a = diccionari::operator=(A);
   return a;*/
+    return *this;
 }
 anagrames::~anagrames() throw(){
 }

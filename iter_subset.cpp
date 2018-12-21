@@ -14,7 +14,7 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
   _n = n;
   _k = k;
   _cent = (n-k+1);
-  for(int i=0; i<k; ++i){
+  for(unsigned i=0; i<k; ++i){
     if(i+1<n) _info[i]=i+1;
   }
 }
@@ -30,7 +30,7 @@ iter_subset::iter_subset(const iter_subset& its) throw(error){
 }
 
 iter_subset& iter_subset::operator=(const iter_subset& its) throw(error){
-
+  return *this;
 }
 
 iter_subset::~iter_subset() throw(){
@@ -57,7 +57,7 @@ subset iter_subset::operator*() const throw(error){
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset& iter_subset::operator++() throw(){
-
+  return *this;
 }
 
 /* Operador de postincrement.

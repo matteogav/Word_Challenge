@@ -5,7 +5,7 @@
     ordre lexicogràfic ascendent. */
 bool es_canonic(const string& s) throw(){
     //Pre: true
-    //Post retorna cert si la paraula és canonica i false si no-
+    //Post retorna cert si la paraula és canonica i false si no
     bool canonic=true;
     if (s.size()!=0){
         unsigned i=0;
