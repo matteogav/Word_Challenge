@@ -27,4 +27,4 @@ monta:
 	$(CO) driver driver_joc_par.o anagrames.o diccionari.o iter_subset.o obte_paraules.o word_toolkit.o -lesin
 
 clean:
-	rm anagrames.o diccionari.o driver_joc_par.o iter_subset.o obte_paraules.o word_toolkit.o
+	rm anagrames.o diccionari.o driver_joc_par.o iter_subset.o obte_paraules.o word_toolkit.o driver

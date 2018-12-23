@@ -64,24 +64,20 @@ char word_toolkit::mes_frequent(const string& excl, const list<string>& L) throw
 	        char aux=excl[j];
 	        int x=aux-65;
 	        if (0 >= x or x < 26){
-		        cout<<"entra if"<<endl;
 		        int aux_int=aux-65;
 	            vect[aux_int]=0;
 	        }
         }
-        int max=0,xivato=0;
-        char lletra_max;
-        //bucle buscar lletra mes gran el xivato si troba paraules igual es suma si tobra mes gran es posa a 1
+        int max=0;
+        char lletra_max='\0';
+        //bucle buscar lletra mes gran
         for (unsigned i=0;i<26;i++){
             if (max<vect[i]){
                 max=vect[i];
-                xivato=1;
                 lletra_max=i+65;
             }
-            else if (max==vect[i]) xivato++;
         }
-        if (xivato>1) res='<';
-        else res=lletra_max;
+        res=lletra_max;
     }
     //return res
     return res;
