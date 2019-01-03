@@ -8,16 +8,15 @@ void obte_paraules::obte_paraules(nat k, const string& s, const anagrames& A, li
     A.mateix_anagrama_canonic(s, aux_paraules);     //Cridem funcio de classe anagrames per treure tots els anagrames
                                                     //de la paraula s
     bool trobat = false;
-    unsigned i=0;
     string aux_p = aux_paraules.back();
     list<string>::iterator it=aux_paraules.begin();
     if (aux_p.size() >= k){                             //mirem ultim element si es de mida mes gran que k sino no fa res
-      while (i < aux_paraules.size() and !trobat){      //while d'afegir nomes les paraules de aux_paraules de mida k i sortir
+      while (it != aux_paraules.end() and !trobat){      //while d'afegir nomes les paraules de aux_paraules de mida k i sortir
                                                         //del while si ja es mes gran de mida que k
         string aux = *it;
         if (aux.size() == k) paraules.push_back(aux);
         else if (aux.size() > k) trobat = true;
-        i++;
+        it++;
       }
     }
   }
@@ -34,14 +33,13 @@ void obte_paraules::obte_paraules(const string& s, const anagrames& A, list<stri
     list<string> aux_paraules;
     A.mateix_anagrama_canonic(s, aux_paraules);     //Cridem funcio de classe anagrames per treure tots els anagrames
                                                     //de la paraula s
-    unsigned i=0;
     string aux_p = aux_paraules.back();
     list<string>::iterator it=aux_paraules.begin();
     if (aux_p.size() >= 3){                       //mirem ultim element si es de mida mes gran que 3 sino no fa res
-      while (i < aux_paraules.size()){            //while d'afegir les paraules de aux_paraules de mida mes gran que 3
+      while (it != aux_paraules.end()){            //while d'afegir les paraules de aux_paraules de mida mes gran que 3
         string aux = *it;
         if (aux.size() >= 3) paraules.push_back(aux);
-        i++;
+        it++;
       }
     }
   }
