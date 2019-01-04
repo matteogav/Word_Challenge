@@ -1,27 +1,21 @@
 #include "iter_subset.hpp"
 
-/* Retorna una copia del subset passat per parametre.
-subset iter_subset::iter_copia(const subset& sub) throw(error){
-  subset copia;
-  for(int i=0; i<_n; ++i) copia[i] = _info[i];
-  return copia;
-}
-*/
-
 /* Construeix un iterador sobre els subconjunts de k elements
      de {1, ..., n}; si k > n no hi ha res a recórrer. */
 iter_subset::iter_subset(nat n, nat k) throw(error){
   _n = n;
   _k = k;
-  _cent = (n-k+1);
-  for(unsigned i=0; i<k; ++i){
-    if(i+1<n) _info[i]=i+1;
+  _cent = (n-k+1); //Calculem el centinella, d'aquesta manera podrem saber si estem a l'ultim subconjunt.
+  _final = false;
+  if(k<=n){
+    for(unsigned i=1; i<=k; ++i){ //Inicialitzem el subset _info, amb 'k' elements.
+      if(i<=n) _info[i]=i; //{1, ..., n-1, n}
+    }
   }
 }
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
 iter_subset::iter_subset(const iter_subset& its) throw(error){
-  //_info = iter_copia(its._info);
   _info = its._info;
   _n = its._n;
   _k = its._k;
@@ -30,6 +24,13 @@ iter_subset::iter_subset(const iter_subset& its) throw(error){
 }
 
 iter_subset& iter_subset::operator=(const iter_subset& its) throw(error){
+  if(this != its){
+    _info = its._info;
+    _n = its._n;
+    _k = its._k;
+    _final = its._final;
+    _cent = its._cent;
+  }
   return *this;
 }
 
@@ -57,7 +58,21 @@ subset iter_subset::operator*() const throw(error){
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset& iter_subset::operator++() throw(){
-  return *this;
+  int j=1;
+  if(_info[0]!=_cent){
+    if(_info[_k-1]<_n) _info[_k-1]+=1;
+    else{
+      while((_info[_k-1-j]+j)>=_n) ++j;
+      _info[_k-1-j]+=1;
+      int m=j;
+      for(int i=(_k-m); i<_k; ++i){
+        if(_info[i-1]+1<_n) _info[i]=(_info[i-1]+1);
+        --m;
+      }
+    }
+  }
+  else _final = true;
+  return _info;
 }
 
 /* Operador de postincrement.
