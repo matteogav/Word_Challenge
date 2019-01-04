@@ -25,11 +25,13 @@ iter_subset::iter_subset(const iter_subset& its) throw(error){
 
 iter_subset& iter_subset::operator=(const iter_subset& its) throw(error){
   if(this != its){
-    _info = its._info;
-    _n = its._n;
-    _k = its._k;
-    _final = its._final;
-    _cent = its._cent;
+    iter_subset cp;
+    cp._info = its._info;
+    cp._n = its._n;
+    cp._k = its._k;
+    cp._final = its._final;
+    cp_cent = its._cent;
+    this = cp;
   }
   return *this;
 }
