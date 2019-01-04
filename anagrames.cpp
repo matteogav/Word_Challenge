@@ -1,4 +1,5 @@
 #include "anagrames.hpp"
+#include "word_toolkit.hpp"
 
 /* Construeix un anagrama buit. */
 anagrames::anagrames() throw(error){
@@ -26,10 +27,10 @@ void anagrames::insereix(const string& p) throw(error){
 /* Retorna la llista ordenada de paraules p tals que anagrama_canonic(p)=a.
     Llança un error si les lletres de a no estan en ordre ascendent. */
 void anagrames::mateix_anagrama_canonic(const string& a, list<string>& L) const throw(error){
-    /*if(word_toolkit::es_canonic(a)){
+    if(word_toolkit::es_canonic(a)){
 
     }
     else{
         throw NoEsCanonic;
-    }*/
+    }
 }

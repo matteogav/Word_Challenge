@@ -84,7 +84,16 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
 /* Retorna una llista amb totes les paraules del diccionari
     de longitud major o igual a k en ordre alfabètic ascendent. */
 void diccionari::llista_paraules(nat k, list<string>& L) const throw(error){
-    
+    string aux;
+    list<string> aux_L;
+    rllista_paraules(_arrel, aux, 0, aux_L);
+
+    list<string>::iterator it=aux_L.begin();
+    while (it != aux_L.end()){
+        string aux_it=*it;
+        if (aux_it.size() >= k) L.push_back(aux_it);
+        it++;
+    }
 }
 
 /* Retorna el nombre de paraules en el diccionari. */
@@ -126,3 +135,15 @@ typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &
     return n;
 }
 
+void diccionari::rllista_paraules(node* n, string k, nat i, list<string>& aux_L) throw(){
+    if (n){
+        rllista_paraules(n->_esq, k, i, aux_L);
+        if (n->_c!='#') k[i] = n->_c;
+        else {
+            aux_L.push_back(k);
+            k = "";
+        }
+        rllista_paraules(n->_cen, k, i+1, aux_L);
+        rllista_paraules(n->_dret, k, i, aux_L);
+    }
+}
