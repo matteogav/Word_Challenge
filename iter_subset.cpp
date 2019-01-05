@@ -15,13 +15,8 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
     _final = (_info[0]==_cent);
   }
   else{
-<<<<<<< HEAD
     _final = true;
-    throw IterSubsetIncorr;
-=======
-    _final = true;
-    throw IterSubsetIncorr;
->>>>>>> 67015ec95bf68248e4212a9bfc5fe92aaae4d71c
+    throw error(IterSubsetIncorr);
   }
 }
 
