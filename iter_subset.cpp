@@ -59,7 +59,7 @@ subset iter_subset::operator*() const throw(error){
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset& iter_subset::operator++() throw(){
-  if(n>k){
+  if(_n>_k){
     nat j=1;
     if(_info[0]!=_cent){
       if(_info[_k-1]<_n) _info[_k-1]+=1;
