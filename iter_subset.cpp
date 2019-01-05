@@ -12,9 +12,6 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
       }
     }
     _final = (_info[0]==_cent);
-    if(k>n){
-      throw error(IterSubsetIncorr);
-    }
 }
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
@@ -50,9 +47,9 @@ bool iter_subset::end() const throw(){
      l'iterador; llança un error si l'iterador apunta al sentinella. */
 subset iter_subset::operator*() const throw(error){
   if(_final){
-    throw error(IterSubsetIncorr);
+    throw IterSubsetIncorr;
   }
-  return _info;
+  else return _info;
 }
 
 /* Operador de preincrement.
@@ -77,7 +74,7 @@ iter_subset& iter_subset::operator++() throw(){
   }
   else{
     _final = true;
-    throw error(IterSubsetIncorr);
+    throw IterSubsetIncorr;
   }
   return *this;
 }
