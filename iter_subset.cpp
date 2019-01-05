@@ -15,7 +15,7 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
     _final = (_info[0]==_cent);
   }
   else{
-    throw IterSubsetIncorr;
+    throw error(IterSubsetIncorr);
   }
 }
 
@@ -29,15 +29,11 @@ iter_subset::iter_subset(const iter_subset& its) throw(error){
 }
 
 iter_subset& iter_subset::operator=(const iter_subset& its) throw(error){
-  if(this != its){
-    iter_subset cp;
-    cp._info = its._info;
-    cp._n = its._n;
-    cp._k = its._k;
-    cp._final = its._final;
-    cp_cent = its._cent;
-    this = cp;
-  }
+  _info = its._info;
+  _n = its._n;
+  _k = its._k;
+  _final = its._final;
+  _cent = its._cent;
   return *this;
 }
 
@@ -56,7 +52,7 @@ bool iter_subset::end() const throw(){
      l'iterador; llança un error si l'iterador apunta al sentinella. */
 subset iter_subset::operator*() const throw(error){
   if(_final){
-    throw IterSubsetIncorr;
+    throw error(IterSubsetIncorr);
   }
   return _info;
 }
@@ -65,21 +61,21 @@ subset iter_subset::operator*() const throw(error){
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset& iter_subset::operator++() throw(){
-  int j=1;
+  nat j=1;
   if(_info[0]!=_cent){
     if(_info[_k-1]<_n) _info[_k-1]+=1;
     else{
       while((_info[_k-1-j]+j)>=_n) ++j;
       _info[_k-1-j]+=1;
-      int m=j;
-      for(int i=(_k-m); i<_k; ++i){
+      nat m=j;
+      for(nat i=(_k-m); i<_k; ++i){
         if(_info[i-1]+1<_n) _info[i]=(_info[i-1]+1);
         --m;
       }
     }
   }
   else _final = true;
-  return _info;
+  return *this;
 }
 
 /* Operador de postincrement.

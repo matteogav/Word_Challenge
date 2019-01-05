@@ -21,7 +21,7 @@ void obte_paraules::obte_paraules(nat k, const string& s, const anagrames& A, li
     }
   }
   else{
-    throw LongitudInvalida;
+    throw error(LongitudInvalida);
   }
 }
 
@@ -44,6 +44,6 @@ void obte_paraules::obte_paraules(const string& s, const anagrames& A, list<stri
     }
   }
   else{
-    throw LongitudInvalida;
+    throw error(LongitudInvalida);
   }
 }

@@ -26,5 +26,8 @@ word_toolkit:
 monta:
 	$(CO) driver driver_joc_par.o anagrames.o diccionari.o iter_subset.o obte_paraules.o word_toolkit.o -lesin
 
+comprova:
+	echo "./driver < jp1.in >& jp1.out && diff jp1.out jp1.res"
+
 clean:
 	rm anagrames.o diccionari.o driver_joc_par.o iter_subset.o obte_paraules.o word_toolkit.o driver

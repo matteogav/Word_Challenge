@@ -31,6 +31,6 @@ void anagrames::mateix_anagrama_canonic(const string& a, list<string>& L) const 
 
     }
     else{
-        throw NoEsCanonic;
+        throw error(NoEsCanonic);
     }
 }
