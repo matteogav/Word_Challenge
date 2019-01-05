@@ -70,7 +70,6 @@ iter_subset& iter_subset::operator++() throw(){
       }
     }
     else _final = true;
-  }
   return *this;
 }
 
