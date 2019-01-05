@@ -15,6 +15,7 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
     _final = (_info[0]==_cent);
   }
   else{
+    _final = true;
     throw IterSubsetIncorr;
   }
 }
