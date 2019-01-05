@@ -3,14 +3,19 @@
 /* Construeix un iterador sobre els subconjunts de k elements
      de {1, ..., n}; si k > n no hi ha res a recórrer. */
 iter_subset::iter_subset(nat n, nat k) throw(error){
-  _n = n;
-  _k = k;
-  _cent = (n-k+1); //Calculem el centinella, d'aquesta manera podrem saber si estem a l'ultim subconjunt.
-  _final = false;
-  if(k<=n){
-    for(unsigned i=1; i<=k; ++i){ //Inicialitzem el subset _info, amb 'k' elements.
-      if(i<=n) _info[i]=i; //{1, ..., n-1, n}
+  if(n>k){
+    _n = n;
+    _k = k;
+    _cent = (n-k+1); //Calculem el centinella, d'aquesta manera podrem saber si estem a l'ultim subconjunt.
+    if(k<=n){
+      for(unsigned i=1; i<=k; ++i){ //Inicialitzem el subset _info, amb 'k' elements.
+        if(i<=n) _info[i]=i; //{1, ..., n-1, n}
+      }
     }
+    _final = (_info[0]==_cent);
+  }
+  else{
+    throw IterSubsetIncorr;
   }
 }
 
