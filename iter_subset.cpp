@@ -12,6 +12,9 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
       }
     }
     _final = (_info[0]==_cent);
+    if(k>n){
+      throw error(IterSubsetIncorr);
+    }
 }
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
