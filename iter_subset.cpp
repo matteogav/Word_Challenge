@@ -3,7 +3,6 @@
 /* Construeix un iterador sobre els subconjunts de k elements
      de {1, ..., n}; si k > n no hi ha res a recórrer. */
 iter_subset::iter_subset(nat n, nat k) throw(error){
-  if(n>k){
     _n = n;
     _k = k;
     _cent = (n-k+1); //Calculem el centinella, d'aquesta manera podrem saber si estem a l'ultim subconjunt.
@@ -13,11 +12,6 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
       }
     }
     _final = (_info[0]==_cent);
-  }
-  else{
-    _final = true;
-    throw error(IterSubsetIncorr);
-  }
 }
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
@@ -62,20 +56,26 @@ subset iter_subset::operator*() const throw(error){
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset& iter_subset::operator++() throw(){
-  nat j=1;
-  if(_info[0]!=_cent){
-    if(_info[_k-1]<_n) _info[_k-1]+=1;
-    else{
-      while((_info[_k-1-j]+j)>=_n) ++j;
-      _info[_k-1-j]+=1;
-      nat m=j;
-      for(nat i=(_k-m); i<_k; ++i){
-        if(_info[i-1]+1<_n) _info[i]=(_info[i-1]+1);
-        --m;
+  if(n>k){
+    nat j=1;
+    if(_info[0]!=_cent){
+      if(_info[_k-1]<_n) _info[_k-1]+=1;
+      else{
+        while((_info[_k-1-j]+j)>=_n) ++j;
+        _info[_k-1-j]+=1;
+        nat m=j;
+        for(nat i=(_k-m); i<_k; ++i){
+          if(_info[i-1]+1<_n) _info[i]=(_info[i-1]+1);
+          --m;
+        }
       }
     }
+    else _final = true;
   }
-  else _final = true;
+  else{
+    _final = true;
+    throw error(IterSubsetIncorr);
+  }
   return *this;
 }
 
