@@ -1,0 +1,102 @@
+###! Memoria general
+#set_memory 100000 1000000000
+###! ---------------------------------------------------
+###!        CLASSE DICCIONARI
+###! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+###!              INDEX DEL JOC DE PROVES DE LA CLASSE DICCIONARI
+###! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+###!
+###! 100 Diccionari buit
+###! 101 Diccionari amb 1 paraula
+###! 102 Diccionari amb 2 paraules
+###!     102.1 Les paraules w1 i w2 no tenen prefix comú
+###!     102.2 Les paraules w1 i w2 tenen prefix comú
+###!     102.3 La paraule w1 es prefix de w2
+###! 103 Diccionari amb 3 paraules
+###!     103.1 Dues a dues no comparteixen prefix comú
+###!     103.2 Dues de elles (w1 y w2) comparteixen un prefix comú
+###!     103.3 Una d'elles es prefix d'una altre (w1 de w2)
+###!           i no comparteixen prefix comú amb la tercera
+###!     103.4 Les tres paraules comparteixen un prefix comú
+###!           i cap parella comparteix un prefix comú més llarg
+###!     103.5 Les tres paraules comparteixn un prefix comú
+###!           i w1 i w2 comparteixen un prefix comú més llarg
+###!     103.6 Una d'elles es prefix d'una altre (w1 de w2)
+###!           y comparteix prefix comú amb la tercera, però no es prefix
+###!           seu ni viceversa; per tant totes tres tenen un prefix comú
+###!     103.7 Una d'elles es prefix de les altres dues (w1 de w2 y w1 de w3)
+###!           però aquestes no tenen un prefix comu més llarg
+###!     103.8 Una d'elles es prefix de les altres dues (w1 de w2 y w1 de w3)
+###!           i aquestes dues (w2 y w3) tenen un prefix comu més llarg
+###!     103.9 Una d'elles es prefix d'un altre (w1 de w2) i aquesta
+###!           es prefix de la tercera (w2 de w3)
+###! 104 Prova de insercions repetides en diccionaris petits
+###! 105 Diccionari amb varies (1..9) paraules per cada lletra
+###!     de l'abecedari. (mitjana = 4)
+###!     105.1 Quasi ordenades en ordre alfabeticament creixent
+###!     105.2 Ordenades en ordre alfabeticament decrexient
+###!     105.3 Aleatoriament desordenades
+###! 106 Diccionari amb 624 paraules que comencen per 'A'
+###!     106.1 N'hi ha dues dobles insercions
+###!           Ordenades en ordre alfabetic creixent
+###!     106.2 Ordenades en ordre alfabetic decreixent
+###!     106.3 Aleatoriament desordenades
+###! 107 Diccionari amb UNA única paraula d'un sol
+###!     caràcter per cada lletra de l'abecedari.
+###!     107.1 Las paraules s'insereixen quasi en ordre ascendent.
+###!     107.2 Las paraules s'insereixen en ordre ascendent.
+###!     107.3 Las paraules s'insereixen en ordre descendent.
+###!     107.4 Las paraules s'insereixen completament desordenades.
+###! 108 Diccionari amb 20 paraules de mes de 50 caracters
+###! 109 Casos extres de satisfan_patro
+###!     109.1 Patró amb 3 lletres
+###!     109.2 Patró amb 6 lletres
+###! 110 Constructor per Copia
+###! 111 Metode Assignació
+###!
+###! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+###!
+###!
+###!-------------------------------------------------------------------
+###100 Diccionari buit
+###!-------------------------------------------------------------------
+###!
+#init d100 dicc
+###!
+###! Prefixos
+#pre ""
+
+##
+#pre Z
+
+##
+#pre ZZ
+
+##
+###!
+###!
+###! Matching de la cadena buida
+#spats [""]
+totes: 0
+[]
+##[]
+###!
+###! Matchings per Z
+#spats [Z]
+totes: 0
+[]
+##[]
+#spats [*]
+totes: 1
+[]
+##[]
+###!
+###! Matchings per ZZ
+#spats [Z,Z]
+totes: 0
+[]
+##[]
+#spats [*,Z]
+totes: 0
+terminate called after throwing an instance of 'std::out_of_range'
+  what():  basic_string::erase: __pos (which is 4294967295) > this->size() (which is 0)

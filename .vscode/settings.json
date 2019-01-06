@@ -2,6 +2,7 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
         "*.rep": "cpp",
-        "error": "cpp"
+        "error": "cpp",
+        "util": "cpp"
     }
 }

@@ -2,7 +2,7 @@ CC = g++ -c
 CO= g++ -o
 opcions= -std=c++98 -g -O0 -ansi -Wall
 
-TARGETS  = anagrames diccionari driver_joc_par iter_subset obte_paraules word_toolkit monta
+TARGETS  = anagrames diccionari driver_joc_par iter_subset obte_paraules word_toolkit monta comprova
 all: $(TARGETS)
 
 anagrames:
