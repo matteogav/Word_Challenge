@@ -68,17 +68,16 @@ subset iter_subset::operator*() const throw(error){
 iter_subset& iter_subset::operator++() throw(){
   //Θ()
 
-  nat j=1;
+  nat j=1; int ka = _k-1;
   if(_n>_k and _k>0){
     if(_info[0]!=_cent){
-      if(_info[_k-1]<_n) _info[_k-1]+=1;
+      if(_info[ka]<_n) _info[ka]+=1;
       else{
-        while((_info[_k-1-j]+j)>=_n) ++j;
-        _info[_k-1-j]+=1;
-        nat m=j;
-        for(nat i=(_k-m); i<_k; ++i){
+        while((_info[ka-j]+j)>=_n) ++j;
+        _info[ka-j]+=1;
+        for(nat i=(ka-j); i<_k; ++i){
           if(_info[i-1]+1<_n) _info[i]=(_info[i-1]+1);
-          --m;
+          --j;
         }
       }
     }

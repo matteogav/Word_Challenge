@@ -10,7 +10,7 @@ anagrames::anagrames() throw(error){
 anagrames::anagrames(const anagrames& A) throw(error){
   //Θ()
 
-  //anagremes anagrama_copia = diccionari(A);
+  //anagrames anagrama_copia = diccionari(A);
   //return anagrama_copia;
 }
 anagrames& anagrames::operator=(const anagrames& A) throw(error){
