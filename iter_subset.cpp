@@ -3,6 +3,8 @@
 /* Construeix un iterador sobre els subconjunts de k elements
      de {1, ..., n}; si k > n no hi ha res a recórrer. */
 iter_subset::iter_subset(nat n, nat k) throw(error){
+  //Θ()
+
     _n = n;
     _k = k;
     if(_k == 0) _cent=0;
@@ -18,6 +20,8 @@ iter_subset::iter_subset(nat n, nat k) throw(error){
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
 iter_subset::iter_subset(const iter_subset& its) throw(error){
+  //Θ()
+
   _info = its._info;
   _n = its._n;
   _k = its._k;
@@ -26,6 +30,8 @@ iter_subset::iter_subset(const iter_subset& its) throw(error){
 }
 
 iter_subset& iter_subset::operator=(const iter_subset& its) throw(error){
+  //Θ()
+
   _info = its._info;
   _n = its._n;
   _k = its._k;
@@ -42,13 +48,14 @@ iter_subset::~iter_subset() throw(){
      cert quan l'iterador apunta a un subconjunt sentinella fictici
      que queda a continuació de l'últim subconjunt vàlid. */
 bool iter_subset::end() const throw(){
+  //Θ(1)
   return _final;
 }
 
 /* Operador de desreferència. Retorna el subconjunt apuntat per
      l'iterador; llança un error si l'iterador apunta al sentinella. */
 subset iter_subset::operator*() const throw(error){
-
+  //Θ(1)
   if(_final){
     throw error(IterSubsetIncorr);
   }
@@ -59,6 +66,8 @@ subset iter_subset::operator*() const throw(error){
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset& iter_subset::operator++() throw(){
+  //Θ()
+
   nat j=1;
   if(_n>_k and _k>0){
     if(_info[0]!=_cent){
@@ -83,6 +92,8 @@ iter_subset& iter_subset::operator++() throw(){
      Avança l'iterador al següent subconjunt en la seqüència i retorna el seu valor
      previ; no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset iter_subset::operator++(int) throw(){
+  //Θ()
+
   iter_subset cp(*this);
   ++(*this);
   return cp;
@@ -90,9 +101,11 @@ iter_subset iter_subset::operator++(int) throw(){
 
 /* Operadors relacionals. */
 bool iter_subset::operator==(const iter_subset& c) const throw(){
-  bool b;
+  //Θ()
+
+  bool b = true;
   if(c._final!=_final or c._k!=_k or c._cent!=_cent) b = false;
-  else b = true;
+  //else b = true;
   for(unsigned int i=0; i<_k; ++i){
     if(c._info[i]!=_info[i]) b = false;
   }
@@ -100,5 +113,7 @@ bool iter_subset::operator==(const iter_subset& c) const throw(){
 }
 
 bool iter_subset::operator!=(const iter_subset& c) const throw(){
+  //Θ()
+
   return not (*this == c);
 }

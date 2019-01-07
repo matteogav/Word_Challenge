@@ -3,6 +3,8 @@
 /* Retorna la llista de paraules que es poden formar usant k lletres de la paraula s. Llança error si k és major que
     la longitud de l'string s o k < 3. */
 void obte_paraules::obte_paraules(nat k, const string& s, const anagrames& A, list<string>& paraules) throw(error){
+  //Θ()
+
   if(s.size() > k and k > 3){                       //Llença error si k és menor que la longitud de s o k < 3.
     list<string> aux_paraules;
     A.mateix_anagrama_canonic(s, aux_paraules);     //Cridem funcio de classe anagrames per treure tots els anagrames
@@ -29,6 +31,8 @@ void obte_paraules::obte_paraules(nat k, const string& s, const anagrames& A, li
     de menys a més longitud; a igual longitud les paraules estan en ordre alfabètic creixent.
     Llança un error si l'string s té menys de tres lletres. */
 void obte_paraules::obte_paraules(const string& s, const anagrames& A, list<string>& paraules) throw(error){
+  //Θ()
+
   if(s.size() > 3){                               //Llençar error si paraula es mes petit que 3
     list<string> aux_paraules;
     A.mateix_anagrama_canonic(s, aux_paraules);     //Cridem funcio de classe anagrames per treure tots els anagrames
