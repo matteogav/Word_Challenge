@@ -13,3 +13,4 @@ static node* rprefix (node* n, nat i, const string &k) throw();
 static void rsatisfan (node* n, nat i, const string &k, string& res) throw();
 static node* rinsereix (node* n, nat i, const string &k) throw(error);
 static void rllista_paraules(node* n, char* aux, nat i, list<string>& aux_L) throw();
+static void rconsulta (node* n, nat i, string &k, string& res, const vector<string>& q) throw();

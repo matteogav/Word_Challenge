@@ -132,7 +132,25 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
         }
     }
     else {                                      // diccionari amb mes de una paraula
-        string aux_q = "", primera = q[0], aux = "", res = "";
+        if(!q.empty()){
+            string aux_q = "", res="";
+            // paraula amb les primeres lletres de cada paraula del string q
+            unsigned x = 0;
+            while (x < q.size()){
+                string aux_string = q[x];
+                aux_q += aux_string[0];
+                x++;
+            }
+            rconsulta(_arrel->_dret,0,aux_q,res,q);
+        }
+
+
+
+
+
+
+
+        /*string aux_q = "", primera = q[0], aux = "", res = "";
         nat mida_q = q.size();
         vector<nat> vect_i;                 // mida vector = mida string q amb tots iniciats a 0
         vect_i.assign(mida_q, 0);
@@ -178,7 +196,7 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
                 aux_q[i] = aux_s[vect_i[i]];
             }
             i = vect_i.size()-1;
-        }
+        }*/
     }
     if (L.empty()) {
         string paraula_buida = "\0";
@@ -275,5 +293,36 @@ void diccionari::rllista_paraules(node* n, char* aux, nat i, list<string>& aux_L
         }
         rllista_paraules(n->_cen, aux, i+1, aux_L);
         rllista_paraules(n->_dret, aux, i, aux_L);
+    }
+}
+
+void diccionari::rconsulta (node* n, nat i, string &k, string& res, const vector<string>& q) throw(){
+    if (n != NULL){
+        if (k[i] < n->_c) {     // si lletra de k es mes petita mira node esquerra
+            rconsulta(n->_esq,i,k,res,q);
+        }
+        else if (k[i] > n->_c) {        // sino mirar node dret
+            rconsulta(n->_dret,i,k,res,q);
+        }
+        node* pare = n;         // creo un anterior i el numero de i en aquest moment
+        nat x = i;
+        if (k[i] == n->_c) {        // si es igual afegir lletra a k
+            res += k[i];
+            rconsulta(n->_cen,i+1,k,res,q);
+        }
+        else {  //k[i] != n->_c     sino canviar lletra de posicio per una mes de q
+            string aux_q = q[i];
+            nat j = aux_q.find(k[i]);
+            j++;
+            if(j < aux_q.size()) {      // si es pot canviar canvia i mirar per aquesta
+                k[i] = aux_q[j];
+                rconsulta(n,i,k,res,q);
+            }
+            else {
+                nat mida_res = res.length();      // sino es pot canviar torna enrere i borra lletra de k
+                if (mida_res > 0) res.erase(mida_res-1);
+                rconsulta(pare,x,k,res,q);
+            }
+        }
     }
 }
