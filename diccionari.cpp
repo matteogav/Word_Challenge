@@ -1,4 +1,5 @@
 #include "diccionari.hpp"
+#define MAX 50
 
 /* si m és NULL, el resultat és NULL; sinó,
    el resultat apunta al primer node d'un arbre ternari
@@ -53,13 +54,13 @@ diccionari& diccionari::operator=(const diccionari& D) throw(error){
     return (*this);
 }
 diccionari::~diccionari() throw(){
-    esborra_nodes(_arrel);
+    esborra_nodes(_arrel->_dret);
 }
 
 /* Afegeix la paraula p al diccionari; si la paraula p ja formava
     part del diccionari, l'operació no té cap efecte. */
 void diccionari::insereix(const string& p) throw(error){
-    string p2 = p + '#';
+    string p2 = p + '@';
     _arrel = rinsereix(_arrel, 0, p2);
     _sz++;
 }
@@ -96,21 +97,46 @@ string diccionari::prefix(const string& p) const throw(error){
     patró especificat en el vector d'strings q, en ordre alfabètic
     ascendent. */
 void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const throw(error){
-    bool totes = true;
-    nat x=0;
-    while (x < q.size() and totes){         // mirem si q te totes les lletres del abecedari en cada string si es aixi
-                                            // treu totes les paraules crdidant llista_paraules(1,L)
-        string aux_q = q[x];
-        if (aux_q.size() != 26) totes = false;
-        x++;
+    L.clear();
+    if (_sz == 1){                              // diccionari amb paraula buida
+        string paraula_buida = "\0";
+        L.push_back(paraula_buida);
     }
-    if (totes) llista_paraules(1, L);
-    else {
+    else if (_sz == 2) {                        // diccionari amb una sola paraula
+        list<string> aux_L;
+        llista_paraules(1, aux_L);
+        string s_aux_L = aux_L.front();
+        if (s_aux_L.size() != q.size()){
+            string paraula_buida = "\0";
+            L.push_back(paraula_buida);
+        }
+        else {
+            nat i=0;
+            bool finalitza = false;
+            while (i < q.size() and !finalitza){
+                string aux_q = q[i];
+                nat j=0;
+                bool trobat = false;
+                while (j < aux_q.size() and !trobat){
+                    if (aux_q[j] == s_aux_L[i]) trobat = true;
+                    j++;
+                }
+                if (!trobat) finalitza = true;
+                i++;
+            }
+            if (!finalitza) L.push_back(s_aux_L);
+            else {
+                string paraula_buida = "\0";
+                L.push_back(paraula_buida);
+            }
+        }
+    }
+    else {                                      // diccionari amb mes de una paraula
         string aux_q = "", primera = q[0], aux = "", res = "";
-        nat z = 0, mida_q = q.size();
-        int i=0, j=0;
+        nat mida_q = q.size();
         vector<nat> vect_i;                 // mida vector = mida string q amb tots iniciats a 0
         vect_i.assign(mida_q, 0);
+        int i = vect_i.size()-1;
 
         // paraula amb les primeres lletres de cada paraula del string q
         unsigned x = 0;
@@ -119,93 +145,39 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
             aux_q += aux_string[0];
             x++;
         }
-
-        while (vect_i[0] < primera.size()){
-            bool finalitzat = false;
-            while (z < vect_i.size() and !finalitzat){
-
-                i=z;
-                nat mida_res = res.length();
-                string aux_s = q[i];
-                aux += aux_q[i];
-                rsatisfan (_arrel, 0, aux, res);
-                if (mida_res == res.length()) {             // si no modifica res
-                    nat nat_vect_i = vect_i[i];
-                    // augmentar lletra que toca si es pot i borrar l'afegida a aux en aux += aux_q[i]
-                    bool trobat = false;
-                    while (i > -1 and !trobat){
-                        aux_s = q[i];
-                        if (nat_vect_i+1 < aux_s.size()){
-                            nat_vect_i++;
-                            vect_i[i] = nat_vect_i;
-                            aux[i] = aux_s[nat_vect_i];
-                            nat mida_aux = aux.length();
-                            aux.erase(mida_aux-1);
-                            trobat = true;
-                        }
-                        else{
-                            vect_i[i] = 0;
-                            aux[i] = aux_s[0];
-                            if (i-1 == -1) {
-                                vect_i[0] = primera.size() + 1;
-                                trobat = true;
-                                finalitzat = true;
-                            }
-                            else {
-                                i--;
-                                nat_vect_i = vect_i[i];
-                            }
-                        }
-                        nat mida_aux = aux.length();
-                        aux.erase(mida_aux-1);
-                    }
-                }
-                else {                                      // si modifica res
-                    j = i;
-                    // avança i
-                    i++;
-                }
-                if (i == -1) i=0;
-                z=i;
+        //cout<<"primera de q: "<<primera<<" primera combo: "<<aux_q<<endl;
+        bool acabat = false;
+        while (vect_i[0] < primera.size() and !acabat){
+            node* n = rprefix(_arrel->_dret, 0, aux_q);
+            if (n != NULL) {
+                L.push_back(aux_q);
             }
-
-            if (res.size() == q.size()){
-                node* n = rprefix(_arrel->_dret, 0, res);
-                if (n != NULL) {
-                    L.push_back(res);
+            if(vect_i[i]+1 >= q[i].size()){             // si i +1 es >= q.size() de ACAS passa a ACEL
+                vect_i[i] = 0;
+                string aux_s = q[i];
+                aux_q[i] = aux_s[0];
+                i--;
+                while (vect_i[i]+1 >= q[i].size() and i >= 0){          //bucle si fos ACUS passa a ECUS
+                    vect_i[i] = 0;
+                    string aux_s = q[i];
+                    aux_q[i] = aux_s[0];
+                    i--;
+                }
+                if (i < 0){
+                    acabat = true;
                 }
                 else {
-                    // augmentar lletra que toca si es pot i borrar l'afegida a aux en aux += aux_q[i]
-                    bool trobat = false;
-                    while (j > -1 and !trobat){
-                        nat nat_vect_i = vect_i[j];
-                        string aux_s = q[j];
-                        if (nat_vect_i+1 < aux_s.size()){
-                            nat_vect_i++;
-                            vect_i[j] = nat_vect_i;
-                            aux[j] = aux_s[nat_vect_i];
-                            nat mida_aux = aux.length();
-                            aux.erase(mida_aux-1);
-                            trobat = true;
-                        }
-                        else{
-                            vect_i[j] = 0;
-                            aux[j] = aux_s[0];
-                            if (j-1 == -1) {
-                                vect_i[0] = primera.size() + 1;
-                                trobat = true;
-                                finalitzat = true;
-                            }
-                            else {
-                                j--;
-                                nat_vect_i = vect_i[j];
-                            }
-                        }
-                        nat mida_aux = aux.length();
-                        aux.erase(mida_aux-1);
-                    }
+                    vect_i[i] = vect_i[i] + 1;
+                    string aux_s = q[i];
+                    aux_q[i] = aux_s[vect_i[i]];
                 }
             }
+            else if (vect_i[i]+1 < q[i].size()){
+                vect_i[i] = vect_i[i] + 1;
+                string aux_s = q[i];
+                aux_q[i] = aux_s[vect_i[i]];
+            }
+            i = vect_i.size()-1;
         }
     }
     if (L.empty()) {
@@ -218,14 +190,16 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
     de longitud major o igual a k en ordre alfabètic ascendent. */
 void diccionari::llista_paraules(nat k, list<string>& L) const throw(error){
     if (_arrel->_dret != NULL){
-        string aux;
+        char aux[MAX];
         list<string> aux_L;
         rllista_paraules(_arrel->_dret, aux, 0, aux_L);
 
         list<string>::iterator it=aux_L.begin();
         while (it != aux_L.end()){
             string aux_it=*it;
-            if (aux_it.size() >= k) L.push_back(aux_it);
+            if (aux_it.size() >= k) {
+                L.push_back(aux_it);
+            }
             it++;
         }
     }
@@ -243,7 +217,7 @@ nat diccionari::num_pal() const throw(){
 typename diccionari::node* diccionari::rprefix (node* n, nat i, const string &k) throw(){
     node* res  = NULL;
     if (n != NULL){
-        if (i == k.length() and n->_c == '#') res = n;
+        if (i == k.length() and n->_c == '@') res = n;
         else if (n->_c > k[i]) res = rprefix(n->_esq, i, k);
         else if (n->_c < k[i]) res = rprefix(n->_dret, i, k);
         else if (n->_c == k[i]) res = rprefix(n->_cen, i+1, k);
@@ -286,15 +260,20 @@ typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &
     return n;
 }
 
-void diccionari::rllista_paraules(node* n, string k, nat i, list<string>& aux_L) throw(){
-    if (n){
-        rllista_paraules(n->_esq, k, i, aux_L);
-        if (n->_c!='#') k[i] = n->_c;
-        else {
-            aux_L.push_back(k);
-            k = "";
+void diccionari::rllista_paraules(node* n, char* aux, nat i, list<string>& aux_L) throw(){
+    if (n != NULL){
+        rllista_paraules(n->_esq, aux, i, aux_L);
+        if (n->_c != '@') aux[i] = n->_c;
+        else if (n->_c == '@'){
+            aux[i+1] = '\0';
+            string aux_s = aux;
+            if (aux_s.size() <= 4){
+                nat mida_aux = aux_s.length();
+                aux_s.erase(mida_aux-1);
+            }
+            aux_L.push_back(aux_s);
         }
-        rllista_paraules(n->_cen, k, i+1, aux_L);
-        rllista_paraules(n->_dret, k, i, aux_L);
+        rllista_paraules(n->_cen, aux, i+1, aux_L);
+        rllista_paraules(n->_dret, aux, i, aux_L);
     }
 }

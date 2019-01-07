@@ -29,5 +29,8 @@ monta:
 comprova:
 	echo "./driver < jp1.in >& jp1.out && diff jp1.out jp1.res"
 
+rmout:
+	rm jp_public/*.out
+
 clean:
 	rm anagrames.o diccionari.o driver_joc_par.o iter_subset.o obte_paraules.o word_toolkit.o driver
