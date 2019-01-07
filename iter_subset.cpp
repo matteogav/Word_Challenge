@@ -5,13 +5,15 @@
 iter_subset::iter_subset(nat n, nat k) throw(error){
     _n = n;
     _k = k;
-    _cent = (n-k+1); //Calculem el centinella, d'aquesta manera podrem saber si estem a l'ultim subconjunt.
-    if(k<=n){
-      for(unsigned i=1; i<=k; ++i){ //Inicialitzem el subset _info, amb 'k' elements.
-        if(i<=n) _info[i]=i; //{1, ..., n-1, n}
+    if(_k == 0) _cent=0;
+    else _cent = (n-k)+1; //Calculem el centinella, d'aquesta manera podrem saber si estem a l'ultim subconjunt.
+    if(n>=k){
+      for(unsigned int i=0; i<k; ++i){ //Inicialitzem el subset _info, amb 'k' elements.
+        if(_n>=i) _info.push_back(i+1);
       }
     }
-    _final = (_info[0]==_cent);
+    if(n>=k) _final = false;
+    else _final = true;
 }
 
 /* Tres grans. Constructor per còpia, operador d'assignació i destructor. */
@@ -46,17 +48,19 @@ bool iter_subset::end() const throw(){
 /* Operador de desreferència. Retorna el subconjunt apuntat per
      l'iterador; llança un error si l'iterador apunta al sentinella. */
 subset iter_subset::operator*() const throw(error){
+
   if(_final){
-    throw IterSubsetIncorr;
+    throw error(IterSubsetIncorr);
   }
-  else return _info;
+  return _info;
 }
 
 /* Operador de preincrement.
      Avança l'iterador al següent subconjunt en la seqüència i el retorna;
      no es produeix l'avançament si l'iterador ja apuntava al sentinella. */
 iter_subset& iter_subset::operator++() throw(){
-    nat j=1;
+  nat j=1;
+  if(_n>_k and _k>0){
     if(_info[0]!=_cent){
       if(_info[_k-1]<_n) _info[_k-1]+=1;
       else{
@@ -70,6 +74,8 @@ iter_subset& iter_subset::operator++() throw(){
       }
     }
     else _final = true;
+  }
+  else _final = true;
   return *this;
 }
 
@@ -84,10 +90,11 @@ iter_subset iter_subset::operator++(int) throw(){
 
 /* Operadors relacionals. */
 bool iter_subset::operator==(const iter_subset& c) const throw(){
-  bool b = true; int i=0;
-  while(not c._final){
+  bool b;
+  if(c._final!=_final or c._k!=_k or c._cent!=_cent) b = false;
+  else b = true;
+  for(unsigned int i=0; i<_k; ++i){
     if(c._info[i]!=_info[i]) b = false;
-    else ++i;
   }
   return b;
 }
