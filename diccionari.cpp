@@ -133,67 +133,9 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
     // Post: emplena L amb les paraules que compleixen els diferents patrons de q
     //0(n^2)
 
-    L.clear();
-    if(q.front() != "\0"){
-        if (_sz == 1){                              // diccionari amb paraula buida
-            string paraula_buida = "\0";
-            L.push_back(paraula_buida);
-        }
-        else {                                      // diccionari amb una o mes de una paraula
-            bool totes = true;
-            nat x=0;
-            while (x < q.size() and totes){         // mirem si q te totes les lletres del abecedari en cada string si es aixi
-                                                     // treu totes les paraules crdidant llista_paraules(1,L)
-                string aux_q = q[x];
-                if (aux_q.size() != 26) totes = false;
-                x++;
-            }
-
-            if (totes) {
-                list<string> LL;
-                nat j = q.size();
-                llista_paraules(j, LL);
-                list<string>::iterator it = LL.begin();
-                while (it != LL.end()){
-                    string it_s = *it;
-                    if (it_s.size() == q.size()) L.push_back(it_s);
-                    it++;
-                }
-            }
-            else{
-
-                list<string> LL, aux_L;
-                //nat j = q.size();
-                llista_paraules(1, LL);
-                list<string>::iterator it = LL.begin();         // totes les paraules = > que parto.size()
-//                    cout<<"[[[";
-                    while (it != LL.end()){
-//                        cout<<" "<<*it;
-                        it++;
-                    }
-//                    cout<<" ]]]"<<endl;
-                if (!LL.empty()){
-                    list<string>::iterator it = LL.begin();         // totes les paraules = > que parto.size()
-                    while (it != LL.end()){
-                        string it_s = *it;
-                        if (it_s.size() == q.size()) {
-                            aux_L.push_back(it_s);
-                        }
-                        it++;
-                    }
-                }
-                string aux_q = "";
-                // paraula amb les primeres lletres de cada paraula del string q
-                unsigned x = 0;
-                while (x < q.size()){
-                    string aux_string = q[x];
-                    aux_q += aux_string[0];
-                    x++;
-                }
-                rsatisfan(aux_q, q, aux_L, L);
-            }
-        }
-    }
+    string s;
+    list<string> aux;
+    L = rconsulta(_arrel->_dret, q, 0, s, aux);
     if (L.empty()) {
         string paraula_buida = "\0";
         L.push_back(paraula_buida);                 // si la llista resultant es buida afegir '\0' a L perque sempre ha
@@ -341,4 +283,24 @@ void diccionari::rllista_paraules(node* n, string &aux, nat i, list<string>& aux
             //aux="";
         }
     }
+}
+
+list<string> diccionari::rconsulta (node* n, vector<string> v, int i, string& s, list<string>& aux) throw(){
+
+  if (n != NULL){
+
+    if (n->_c == '@') {
+      aux.push_back(s);
+      return aux;
+    }
+    aux = rconsulta(n->_esq, v, i, s, aux);
+
+    if(v[i].find(n->_c), 0){
+      s+= n->_c;
+      aux = rconsulta(n->_cen, v, i+1, s, aux);
+    }
+
+    aux = rconsulta(n->_dret, v, i, s, aux);
+  }
+  return aux;
 }
