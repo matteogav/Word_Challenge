@@ -4,6 +4,7 @@
         "*.rep": "cpp",
         "error": "cpp",
         "util": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "unordered_map": "cpp"
     }
 }

@@ -98,41 +98,12 @@ string diccionari::prefix(const string& p) const throw(error){
     ascendent. */
 void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const throw(error){
     L.clear();
-    if (_sz == 1){                              // diccionari amb paraula buida
-        string paraula_buida = "\0";
-        L.push_back(paraula_buida);
-    }
-    else if (_sz == 2) {                        // diccionari amb una sola paraula
-        list<string> aux_L;
-        llista_paraules(1, aux_L);
-        string s_aux_L = aux_L.front();
-        if (s_aux_L.size() != q.size()){
+    if(q.front() != "\0"){
+        if (_sz == 1){                              // diccionari amb paraula buida
             string paraula_buida = "\0";
             L.push_back(paraula_buida);
         }
-        else {
-            nat i=0;
-            bool finalitza = false;
-            while (i < q.size() and !finalitza){
-                string aux_q = q[i];
-                nat j=0;
-                bool trobat = false;
-                while (j < aux_q.size() and !trobat){
-                    if (aux_q[j] == s_aux_L[i]) trobat = true;
-                    j++;
-                }
-                if (!trobat) finalitza = true;
-                i++;
-            }
-            if (!finalitza) L.push_back(s_aux_L);
-            else {
-                string paraula_buida = "\0";
-                L.push_back(paraula_buida);
-            }
-        }
-    }
-    else {                                      // diccionari amb mes de una paraula
-        if(!q.empty()){
+        else {                                      // diccionari amb una o mes de una paraula
             string aux_q = "", res="";
             // paraula amb les primeres lletres de cada paraula del string q
             unsigned x = 0;
@@ -141,62 +112,15 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
                 aux_q += aux_string[0];
                 x++;
             }
+            //cout<<"aux_q: "<<aux_q<<endl;
             rconsulta(_arrel->_dret,0,aux_q,res,q);
+            if (res.size() == q.size()){
+                node* n = rprefix(_arrel->_dret, 0, res);
+                if (n != NULL) {
+                    L.push_back(res);
+                }
+            }
         }
-
-
-
-
-
-
-
-        /*string aux_q = "", primera = q[0], aux = "", res = "";
-        nat mida_q = q.size();
-        vector<nat> vect_i;                 // mida vector = mida string q amb tots iniciats a 0
-        vect_i.assign(mida_q, 0);
-        int i = vect_i.size()-1;
-
-        // paraula amb les primeres lletres de cada paraula del string q
-        unsigned x = 0;
-        while (x < q.size()){
-            string aux_string = q[x];
-            aux_q += aux_string[0];
-            x++;
-        }
-        //cout<<"primera de q: "<<primera<<" primera combo: "<<aux_q<<endl;
-        bool acabat = false;
-        while (vect_i[0] < primera.size() and !acabat){
-            node* n = rprefix(_arrel->_dret, 0, aux_q);
-            if (n != NULL) {
-                L.push_back(aux_q);
-            }
-            if(vect_i[i]+1 >= q[i].size()){             // si i +1 es >= q.size() de ACAS passa a ACEL
-                vect_i[i] = 0;
-                string aux_s = q[i];
-                aux_q[i] = aux_s[0];
-                i--;
-                while (vect_i[i]+1 >= q[i].size() and i >= 0){          //bucle si fos ACUS passa a ECUS
-                    vect_i[i] = 0;
-                    string aux_s = q[i];
-                    aux_q[i] = aux_s[0];
-                    i--;
-                }
-                if (i < 0){
-                    acabat = true;
-                }
-                else {
-                    vect_i[i] = vect_i[i] + 1;
-                    string aux_s = q[i];
-                    aux_q[i] = aux_s[vect_i[i]];
-                }
-            }
-            else if (vect_i[i]+1 < q[i].size()){
-                vect_i[i] = vect_i[i] + 1;
-                string aux_s = q[i];
-                aux_q[i] = aux_s[vect_i[i]];
-            }
-            i = vect_i.size()-1;
-        }*/
     }
     if (L.empty()) {
         string paraula_buida = "\0";
@@ -310,7 +234,7 @@ void diccionari::rconsulta (node* n, nat i, string &k, string& res, const vector
             res += k[i];
             rconsulta(n->_cen,i+1,k,res,q);
         }
-        else {  //k[i] != n->_c     sino canviar lletra de posicio per una mes de q
+        else if (n->_c != '@' and i < q.size()){  //k[i] != n->_c     sino canviar lletra de posicio per una mes de q
             string aux_q = q[i];
             nat j = aux_q.find(k[i]);
             j++;
@@ -319,7 +243,7 @@ void diccionari::rconsulta (node* n, nat i, string &k, string& res, const vector
                 rconsulta(n,i,k,res,q);
             }
             else {
-                nat mida_res = res.length();      // sino es pot canviar torna enrere i borra lletra de k
+                nat mida_res = res.length();      // sino es pot canviar torna enrere i borra lletra de res
                 if (mida_res > 0) res.erase(mida_res-1);
                 rconsulta(pare,x,k,res,q);
             }

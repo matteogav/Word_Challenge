@@ -2238,3 +2238,30 @@ B
 ###!
 ###! Matching de la cadena buida
 #spats [""]
+[]
+##[]
+###!
+###! Matchings per A
+#spats [A]
+[A]
+##[A]
+#spats [*]
+[A]
+##[A, B]
+###!
+###! Matchings per AZ
+#spats [A,Z]
+[]
+##[]
+#spats [*,Z]
+[]
+##[]
+#spats [A,*]
+[]
+##[]
+#spats [*,*]
+[]
+##[]
+###!
+###! Matchings per B
+#spats [B]
