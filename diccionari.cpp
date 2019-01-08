@@ -11,7 +11,6 @@ typename diccionari::node* diccionari::copia_nodes(node* m) throw(error){
         n = new node;
         try {
             n->_c = m->_c;
-            n->_par = m->_par;
             n->_esq = copia_nodes(m->_esq);
             n->_cen = copia_nodes(m->_cen);
             n->_dret = copia_nodes(m->_dret);
@@ -38,7 +37,6 @@ void diccionari::esborra_nodes(node* m) throw(){
 diccionari::diccionari() throw(error){
     _arrel->_c='\0';                // codi ascii 00
     _arrel->_esq = _arrel->_cen = _arrel->_dret = NULL;
-    _arrel->_par = "";
     _sz=1;
 }
 
@@ -63,8 +61,7 @@ diccionari::~diccionari() throw(){
     part del diccionari, l'operació no té cap efecte. */
 void diccionari::insereix(const string& p) throw(error){
     string p2 = p + '@';
-    node* pare = _arrel;
-    _arrel = rinsereix(_arrel, 0, p2, pare);
+    _arrel = rinsereix(_arrel, 0, p2);
     _sz++;
 }
 
@@ -203,17 +200,14 @@ void diccionari::rsatisfan (node* n, nat i, const string &k, string& res) throw(
     }
 }
 
-typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &k, node* pare) throw(error){
+typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &k) throw(error){
     if (n == NULL){
         n = new node;
         n->_esq = n->_dret = n->_cen = NULL;
         n->_c = k[i];
         try{
             if (i < k.size()){
-            string aux_s = pare->_par;
-            n->_par = aux_s + k[i];
-            pare = n;
-                n->_cen = rinsereix(n->_cen, i+1, k, pare);
+                n->_cen = rinsereix(n->_cen, i+1, k);
             }
         }
         catch (error){
@@ -222,16 +216,9 @@ typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &
         }
     }
     else{
-        if (n->_c > k[i]) {
-            n->_esq = rinsereix(n->_esq, i, k, pare);
-        }
-        else if (n->_c < k[i]) {
-            n->_dret = rinsereix(n->_dret, i ,k, pare);
-        }
-        else {
-            pare = n;
-            n->_cen = rinsereix(n->_cen, i+1, k, pare);  //n->_c == k[i]
-        }
+        if (n->_c > k[i]) n->_esq = rinsereix(n->_esq, i, k);
+        else if (n->_c < k[i]) n->_dret = rinsereix(n->_dret, i ,k);
+        else n->_cen = rinsereix(n->_cen, i+1, k);  //n->_c == k[i]
     }
     return n;
 }
