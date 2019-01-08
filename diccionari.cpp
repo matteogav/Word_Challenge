@@ -35,7 +35,7 @@ void diccionari::esborra_nodes(node* m) throw(){
 /* Construeix un diccionari que conté únicament una paraula:
     la paraula buida. */
 diccionari::diccionari() throw(error){
-    _arrel->_c='\0';                // codi ascii 00
+    _arrel->_c='@';                // codi ascii 00
     _arrel->_esq = _arrel->_cen = _arrel->_dret = NULL;
     _sz=1;
 }
@@ -125,7 +125,39 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
                 }
             }
             else{
-                string aux_q = "", res="";
+
+                list<string> LL, aux_L;
+                //nat j = q.size();
+                llista_paraules(1, LL);
+                list<string>::iterator it = LL.begin();         // totes les paraules = > que parto.size()
+//                    cout<<"[[[";
+                    while (it != LL.end()){
+//                        cout<<" "<<*it;
+                        it++;
+                    }
+//                    cout<<" ]]]"<<endl;
+                if (!LL.empty()){
+                    list<string>::iterator it = LL.begin();         // totes les paraules = > que parto.size()
+                    while (it != LL.end()){
+                        string it_s = *it;
+                        if (it_s.size() == q.size()) {
+                            aux_L.push_back(it_s);
+                        }
+                        it++;
+                    }
+                }
+                string aux_q = "";
+                // paraula amb les primeres lletres de cada paraula del string q
+                unsigned x = 0;
+                while (x < q.size()){
+                    string aux_string = q[x];
+                    aux_q += aux_string[0];
+                    x++;
+                }
+                rsatisfan(aux_q, q, aux_L, L);
+
+
+                /*string aux_q = "", res="";
                 // paraula amb les primeres lletres de cada paraula del string q
                 unsigned x = 0;
                 while (x < q.size()){
@@ -139,7 +171,7 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
                     if (n != NULL) {
                         L.push_back(res);
                     }
-                }
+                }*/
             }
         }
     }
@@ -153,7 +185,7 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
     de longitud major o igual a k en ordre alfabètic ascendent. */
 void diccionari::llista_paraules(nat k, list<string>& L) const throw(error){
     if (_arrel->_dret != NULL){
-        char aux[MAX];
+        string aux;
         list<string> aux_L;
         rllista_paraules(_arrel->_dret, aux, 0, aux_L);
 
@@ -188,15 +220,42 @@ typename diccionari::node* diccionari::rprefix (node* n, nat i, const string &k)
     return res;
 }
 
-void diccionari::rsatisfan (node* n, nat i, const string &k, string& res) throw(){
+void diccionari::rsatisfan (string &aux_q, vector<string> q, list<string> aux_L, list<string> &L) throw(){
+    string primera = q[0];
+    nat mida_q = q.size();
+    vector<nat> vect_i;                 // mida vector = mida string q amb tots iniciats a 0
+    vect_i.assign(mida_q, 0);
+    int i = vect_i.size()-1;
+    list<string>::iterator it_aux_L = aux_L.begin();
 
-    if (n != NULL and i < k.size()){
-        if (n->_c > k[i]) rsatisfan(n->_esq, i, k, res);
-        else if (n->_c < k[i]) rsatisfan(n->_dret, i, k, res);
-        else if (n->_c == k[i]) {
-            res = res + k[i];
-            rsatisfan(n->_cen, i+1, k, res);
+    while (it_aux_L != aux_L.end()){
+        string it_s = *it_aux_L;
+        if (it_s == aux_q) {
+            L.push_back(it_s);
+            it_aux_L++;
         }
+        else if(vect_i[i]+1 >= q[i].size()){             // si i +1 es >= q.size() de ACAS passa a ACEL
+            while (vect_i[i]+1 >= q[i].size() and i >= 0){          //bucle si fos ACUS passa a ECUS
+                vect_i[i] = 0;
+                string aux_s = q[i];
+                aux_q[i] = aux_s[0];
+                i--;
+            }
+            if (i < 0){
+                it_aux_L++;
+            }
+            else {
+                vect_i[i] = vect_i[i] + 1;
+                string aux_s = q[i];
+                aux_q[i] = aux_s[vect_i[i]];
+            }
+        }
+        else if (vect_i[i]+1 < q[i].size()){
+            vect_i[i] = vect_i[i] + 1;
+            string aux_s = q[i];
+            aux_q[i] = aux_s[vect_i[i]];
+        }
+        i = vect_i.size()-1;
     }
 }
 
@@ -207,6 +266,7 @@ typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &
         n->_c = k[i];
         try{
             if (i < k.size()){
+                //cout<<k[i]<<" "<<i<<endl;
                 n->_cen = rinsereix(n->_cen, i+1, k);
             }
         }
@@ -223,21 +283,21 @@ typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &
     return n;
 }
 
-void diccionari::rllista_paraules(node* n, char* aux, nat i, list<string>& aux_L) throw(){
+void diccionari::rllista_paraules(node* n, string &aux, nat i, list<string>& aux_L) throw(){
     if (n != NULL){
         rllista_paraules(n->_esq, aux, i, aux_L);
-        if (n->_c != '@') aux[i] = n->_c;
-        else if (n->_c == '@'){
-            aux[i+1] = '\0';
-            string aux_s = aux;
-            if (aux_s.size() <= 4){
-                nat mida_aux = aux_s.length();
-                aux_s.erase(mida_aux-1);
-            }
-            aux_L.push_back(aux_s);
+        if (n->_c != '@') {
+            aux += n->_c;
+            rllista_paraules(n->_cen, aux, i+1, aux_L);
+            nat mida_aux = aux.length();
+            aux.erase(mida_aux-1);
+            rllista_paraules(n->_dret, aux, i, aux_L);
         }
-        rllista_paraules(n->_cen, aux, i+1, aux_L);
-        rllista_paraules(n->_dret, aux, i, aux_L);
+        else if (n->_c == '@'){
+            aux_L.push_back(aux);
+            if (n->_dret != NULL) rllista_paraules(n->_dret, aux, i, aux_L);
+            //aux="";
+        }
     }
 }
 
