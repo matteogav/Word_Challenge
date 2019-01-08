@@ -6,7 +6,7 @@
 bool word_toolkit::es_canonic(const string& s) throw(){
   // Pre: true
   // Post retorna cert si la paraula és canonica i false si no
-  //Θ(n) n lletres
+  //Θ(n) n = tamany del string s
 
   bool canonic=true;
   if (s.size()!=0){
@@ -24,7 +24,7 @@ bool word_toolkit::es_canonic(const string& s) throw(){
 string word_toolkit::anagrama_canonic(const string& s) throw(){
   // Pre: true
   // Post: retorna l'string ordenda canonicament
-  //Θ(n) n lletres
+  //Θ(n) n = tamany del string s
 
   string res=s;
   if (!es_canonic(s)) sort(res.begin(),res.end());
@@ -42,7 +42,7 @@ char word_toolkit::mes_frequent(const string& excl, const list<string>& L) throw
   // Pre: cert
   // Post: retorna la lletra que surt mes en la llista L i que no esta en excl
   //Θ(n*m) m paruales de n lletres
-  
+
   //Si excl es tot l'abacedari res='\0'
   string abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   char res='\0';

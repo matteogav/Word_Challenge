@@ -1,5 +1,6 @@
 subset _info; //Subconjunt
 nat _n;
-nat _k;
-bool _final;  //True quan s'ha arribat a l'ultim subconjunt, sactiva quan l'iterador ja ha iterat el subconjunt amb _info[0]==_cent
+nat _k; // tant la n com la k, les necesitarem per fer diverses operacions, per aixo creiem que
+        // es necesari que un iterador conegui n i k.
+bool _final;  //Cert quan l'iterador a apunta al subconjunt fictici centinella.
 nat _cent; //Indica quin es lultim subconjunt a crear.
