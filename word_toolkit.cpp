@@ -4,7 +4,7 @@
 /* Retorna cert si i només si les lletres de l'string s estan en
     ordre lexicogràfic ascendent. */
 bool word_toolkit::es_canonic(const string& s) throw(){
-  //Θ()
+  //Θ(n) n lletres
   //Pre: true
   //Post retorna cert si la paraula és canonica i false si no
   bool canonic=true;
@@ -21,7 +21,7 @@ bool word_toolkit::es_canonic(const string& s) throw(){
 /* Retorna l'anagrama canònic de l'string s.
     Veure la classe anagrames per saber la definició d'anagrama canònic. */
 string word_toolkit::anagrama_canonic(const string& s) throw(){
-  //Θ()
+  //Θ(n) n lletres
   //Pre: true
   //Post: retorna l'string ordenda canonicament
   string res=s;
@@ -37,7 +37,7 @@ string word_toolkit::anagrama_canonic(const string& s) throw(){
     Si l'string excl inclou totes les lletres de la 'A' a la 'Z' es
     retorna el caràcter '\0', és a dir, el caràcter de codi ASCII 0. */
 char word_toolkit::mes_frequent(const string& excl, const list<string>& L) throw(){
-  //Θ()
+  //Θ(n*m) m paruales de n lletres
   //Si excl es tot l'abacedari res='\0'
   string abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   char res='\0';
