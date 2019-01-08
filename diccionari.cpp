@@ -133,17 +133,6 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
     // Post: emplena L amb les paraules que compleixen els diferents patrons de q
     //0(n)
 
-    /*list<string> LL;
-    llista_paraules(1,LL);
-    list<string>::iterator it=LL.begin();
-    cout<<"[[";
-    while (it != LL.end()){
-        string au=*it;
-        cout<<" "<<au;
-        it++;
-    }
-    cout<<" ]]]"<<endl;
-*/
     string s;
     list<string> aux;
     if (q.size() >= 1){
@@ -204,49 +193,6 @@ typename diccionari::node* diccionari::rprefix (node* n, nat i, const string &k)
         else if (n->_c == k[i]) res = rprefix(n->_cen, i+1, k);
     }
     return res;
-}
-
-void diccionari::rsatisfan (string &aux_q, vector<string> q, list<string> aux_L, list<string> &L) throw(){
-    // Pre: existeix aux_q, q, aux_L i L
-    // Post: emplena L amb les paraules que son iguals als possibles patrons de q
-    //0(n)
-
-    string primera = q[0];
-    nat mida_q = q.size();
-    vector<nat> vect_i;                 // mida vector = mida string q amb tots iniciats a 0
-    vect_i.assign(mida_q, 0);
-    int i = vect_i.size()-1;
-    list<string>::iterator it_aux_L = aux_L.begin();
-
-    while (it_aux_L != aux_L.end()){
-        string it_s = *it_aux_L;
-        if (it_s == aux_q) {
-            L.push_back(it_s);
-            it_aux_L++;
-        }
-        else if(vect_i[i]+1 >= q[i].size()){             // si i +1 es >= q.size() de ACAS passa a ACEL
-            while (vect_i[i]+1 >= q[i].size() and i >= 0){          //bucle si fos ACUS passa a ECUS
-                vect_i[i] = 0;
-                string aux_s = q[i];
-                aux_q[i] = aux_s[0];
-                i--;
-            }
-            if (i < 0){
-                it_aux_L++;
-            }
-            else {
-                vect_i[i] = vect_i[i] + 1;
-                string aux_s = q[i];
-                aux_q[i] = aux_s[vect_i[i]];
-            }
-        }
-        else if (vect_i[i]+1 < q[i].size()){
-            vect_i[i] = vect_i[i] + 1;
-            string aux_s = q[i];
-            aux_q[i] = aux_s[vect_i[i]];
-        }
-        i = vect_i.size()-1;
-    }
 }
 
 typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &k) throw(error){
@@ -324,7 +270,6 @@ list<string> diccionari::rconsulta (node* n, vector<string> v, nat i, string& s,
     // si troba la lletra suma a s i tira pel mig
     if(trobat){
       s+= n->_c;
-//      cout<<"s: "<<s<<endl;
       aux = rconsulta(n->_cen, v, i+1, s, aux);
     }
 
