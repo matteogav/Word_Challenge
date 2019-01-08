@@ -5,6 +5,8 @@
         "error": "cpp",
         "util": "cpp",
         "iostream": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "deque": "cpp",
+        "vector": "cpp"
     }
 }

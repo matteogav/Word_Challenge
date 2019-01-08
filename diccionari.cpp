@@ -98,26 +98,50 @@ string diccionari::prefix(const string& p) const throw(error){
     ascendent. */
 void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const throw(error){
     L.clear();
-    if(q.front() != "\0"){
-        if (_sz == 1){                              // diccionari amb paraula buida
-            string paraula_buida = "\0";
-            L.push_back(paraula_buida);
+
+    bool totes = true;
+    nat x=0;
+    while (x < q.size() and totes){         // mirem si q te totes les lletres del abecedari en cada string si es aixi
+                                            // treu totes les paraules crdidant llista_paraules(1,L)
+        string aux_q = q[x];
+        if (aux_q.size() != 26) totes = false;
+        x++;
+    }
+    if (totes) {
+        list<string> LL;
+        nat j = q.size();
+        llista_paraules(j, LL);
+        list<string>::iterator it = LL.begin();
+        while (it != LL.end()){
+            string it_s = *it;
+            if (it_s.size() == q.size()) L.push_back(it_s);
+            it++;
         }
-        else {                                      // diccionari amb una o mes de una paraula
-            string aux_q = "", res="";
-            // paraula amb les primeres lletres de cada paraula del string q
-            unsigned x = 0;
-            while (x < q.size()){
-                string aux_string = q[x];
-                aux_q += aux_string[0];
-                x++;
+    }
+    else {
+
+        if(q.front() != "\0"){
+        
+            if (_sz == 1){                              // diccionari amb paraula buida
+                string paraula_buida = "\0";
+                L.push_back(paraula_buida);
             }
-            //cout<<"aux_q: "<<aux_q<<endl;
-            rconsulta(_arrel->_dret,0,aux_q,res,q);
-            if (res.size() == q.size()){
-                node* n = rprefix(_arrel->_dret, 0, res);
-                if (n != NULL) {
-                    L.push_back(res);
+            else {                                      // diccionari amb una o mes de una paraula
+                string aux_q = "", res="";
+                // paraula amb les primeres lletres de cada paraula del string q
+                unsigned x = 0;
+                while (x < q.size()){
+                    string aux_string = q[x];
+                    aux_q += aux_string[0];
+                    x++;
+                }
+                //cout<<"aux_q: "<<aux_q<<endl;
+                rconsulta(_arrel->_dret,0,aux_q,res,q);
+                if (res.size() == q.size()){
+                    node* n = rprefix(_arrel->_dret, 0, res);
+                    if (n != NULL) {
+                        L.push_back(res);
+                    }
                 }
             }
         }
