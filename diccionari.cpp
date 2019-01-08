@@ -98,35 +98,33 @@ string diccionari::prefix(const string& p) const throw(error){
     ascendent. */
 void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const throw(error){
     L.clear();
-
-    bool totes = true;
-    nat x=0;
-    while (x < q.size() and totes){         // mirem si q te totes les lletres del abecedari en cada string si es aixi
-                                            // treu totes les paraules crdidant llista_paraules(1,L)
-        string aux_q = q[x];
-        if (aux_q.size() != 26) totes = false;
-        x++;
-    }
-    if (totes) {
-        list<string> LL;
-        nat j = q.size();
-        llista_paraules(j, LL);
-        list<string>::iterator it = LL.begin();
-        while (it != LL.end()){
-            string it_s = *it;
-            if (it_s.size() == q.size()) L.push_back(it_s);
-            it++;
+    if(q.front() != "\0"){
+        if (_sz == 1){                              // diccionari amb paraula buida
+            string paraula_buida = "\0";
+            L.push_back(paraula_buida);
         }
-    }
-    else {
-
-        if(q.front() != "\0"){
-        
-            if (_sz == 1){                              // diccionari amb paraula buida
-                string paraula_buida = "\0";
-                L.push_back(paraula_buida);
+        else {                                      // diccionari amb una o mes de una paraula
+            bool totes = true;
+            nat x=0;
+            while (x < q.size() and totes){         // mirem si q te totes les lletres del abecedari en cada string si es aixi
+                                                     // treu totes les paraules crdidant llista_paraules(1,L)
+                string aux_q = q[x];
+                if (aux_q.size() != 26) totes = false;
+                x++;
             }
-            else {                                      // diccionari amb una o mes de una paraula
+
+            if (totes) {
+                list<string> LL;
+                nat j = q.size();
+                llista_paraules(j, LL); 
+                list<string>::iterator it = LL.begin();
+                while (it != LL.end()){
+                    string it_s = *it;
+                    if (it_s.size() == q.size()) L.push_back(it_s);
+                    it++;
+                }
+            }
+            else{
                 string aux_q = "", res="";
                 // paraula amb les primeres lletres de cada paraula del string q
                 unsigned x = 0;
