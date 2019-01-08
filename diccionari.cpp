@@ -99,7 +99,7 @@ void diccionari::insereix(const string& p) throw(error){
 string diccionari::prefix(const string& p) const throw(error){
     // Pre: existeix p
     // Post: retorna l'string mes llarga que coincideix amb una paraula del diccionari
-    //0(n^2)
+    //0(n)
 
     string res = "";
 
@@ -131,11 +131,24 @@ string diccionari::prefix(const string& p) const throw(error){
 void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const throw(error){
     // Pre: existeix L i q
     // Post: emplena L amb les paraules que compleixen els diferents patrons de q
-    //0(n^2)
+    //0(n)
 
+    /*list<string> LL;
+    llista_paraules(1,LL);
+    list<string>::iterator it=LL.begin();
+    cout<<"[[";
+    while (it != LL.end()){
+        string au=*it;
+        cout<<" "<<au;
+        it++;
+    }
+    cout<<" ]]]"<<endl;
+*/
     string s;
     list<string> aux;
-    L = rconsulta(_arrel->_dret, q, 0, s, aux);
+    if (q.size() >= 1){
+        L = rconsulta(_arrel->_dret, q, 0, s, aux);
+    }
     if (L.empty()) {
         string paraula_buida = "\0";
         L.push_back(paraula_buida);                 // si la llista resultant es buida afegir '\0' a L perque sempre ha
@@ -147,7 +160,7 @@ void diccionari::satisfan_patro(const vector<string>& q, list<string>& L) const 
 void diccionari::llista_paraules(nat k, list<string>& L) const throw(error){
     // Pre: k > 0
     // Post: emplena la llista L amb les paraules que son mes grans o iguals que k del diccionari
-    //0(n^2)
+    //0(n)
 
     if (_arrel->_dret != NULL){
         string aux;
@@ -162,6 +175,7 @@ void diccionari::llista_paraules(nat k, list<string>& L) const throw(error){
             }
             it++;
         }
+
     }
     else {
         string paraula_buida = "\0";
@@ -195,7 +209,7 @@ typename diccionari::node* diccionari::rprefix (node* n, nat i, const string &k)
 void diccionari::rsatisfan (string &aux_q, vector<string> q, list<string> aux_L, list<string> &L) throw(){
     // Pre: existeix aux_q, q, aux_L i L
     // Post: emplena L amb les paraules que son iguals als possibles patrons de q
-    //0(n^2)
+    //0(n)
 
     string primera = q[0];
     nat mida_q = q.size();
@@ -246,8 +260,7 @@ typename diccionari::node* diccionari::rinsereix (node* n, nat i, const string &
         n->_c = k[i];
         try{
             if (i < k.size()){
-                //cout<<k[i]<<" "<<i<<endl;
-                n->_cen = rinsereix(n->_cen, i+1, k);
+               n->_cen = rinsereix(n->_cen, i+1, k);
             }
         }
         catch (error){
@@ -285,19 +298,42 @@ void diccionari::rllista_paraules(node* n, string &aux, nat i, list<string>& aux
     }
 }
 
-list<string> diccionari::rconsulta (node* n, vector<string> v, int i, string& s, list<string>& aux) throw(){
-
+list<string> diccionari::rconsulta (node* n, vector<string> v, nat i, string& s, list<string>& aux) throw(){
   if (n != NULL){
-
     if (n->_c == '@') {
-      aux.push_back(s);
-      return aux;
+      if (s.size() == v.size()) {
+          aux.push_back(s);
+      }
     }
     aux = rconsulta(n->_esq, v, i, s, aux);
 
-    if(v[i].find(n->_c), 0){
+    bool trobat = false;
+
+    // si i < busca paraula en v[i]
+
+    if (i < v.size()){
+      string aux_s=v[i];
+      nat j = 0;
+
+      while (j < aux_s.size() and !trobat){
+        if (aux_s[j] == n->_c) trobat = true;
+        j++;
+      }
+    }
+
+    // si troba la lletra suma a s i tira pel mig
+    if(trobat){
       s+= n->_c;
+//      cout<<"s: "<<s<<endl;
       aux = rconsulta(n->_cen, v, i+1, s, aux);
+    }
+
+    // borra ultima lletra
+    if (s.size() > 0){
+      if (s[s.size()-1] == n->_c){
+        nat mida_aux = s.length();
+        s.erase(mida_aux-1);
+      }
     }
 
     aux = rconsulta(n->_dret, v, i, s, aux);
